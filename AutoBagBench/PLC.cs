@@ -416,5 +416,10 @@ namespace AutoBagBench
                     break;
             }
         }
+
+        public void SetPlcUnMatchBarcodeAlarm()
+        {
+            PlcCommandHelper.SetPlcUnMatchBarcodeAlarm(_master);
+        }
     }
 }

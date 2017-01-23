@@ -577,7 +577,8 @@ namespace AutoBagBench
                     }
                     else
                     {
-                        var k = MessageBox.Show("Barcode un-match with current reference! Do you want to retry?", "Verify Barcode",MessageBoxButtons.YesNo);
+                        var k = MessageBox.Show("Barcode un-match with current reference! Do you want to retry?", "Verify Barcode",MessageBoxButtons.YesNo,MessageBoxIcon.Error);
+                        M221Plc.SetPlcUnMatchBarcodeAlarm();
                         if (k == DialogResult.No)
                         {
                             M221Plc.SetHmiState(HmiState.WaitForRejectBinEntry);

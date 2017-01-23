@@ -82,6 +82,9 @@ namespace Xs156AutoBagPLC.Helper
                 case 22:
                     i = "Belum Boleh ambil Accessories  M30";
                     break;
+                case 23:
+                    i = "Article Barcode Salah!";
+                    break;
                 default: i = "Undefined Error.";
                     break;
             }
