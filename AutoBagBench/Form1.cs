@@ -259,7 +259,7 @@ namespace AutoBagBench
             else
             {
                 btn_ChangeReference.Visible = true;
-                btn_CloseReference.Visible = true;
+                //btn_CloseReference.Visible = true;
             }
             M221Plc.SetOutputQuantity(0);
             M221Plc.SetRejectQuantity(0);
@@ -743,7 +743,7 @@ namespace AutoBagBench
             labelProcessable.Text = _thisMechineProcess.ProcessableQuantity.ToString("000");
             lbl_ArticleNumber.Text = _thisMechineProcess.Product.ArticleNumber;
             tb_ErrorAlarm.Visible = M221Plc.ErrorCode > 0;
-            btn_CloseReference.Visible = !string.IsNullOrWhiteSpace(_thisMechineProcess.Product.ReferenceName)&& !_thisMechineProcess.IsCompleted;
+            //btn_CloseReference.Visible = !string.IsNullOrWhiteSpace(_thisMechineProcess.Product.ReferenceName)&& !_thisMechineProcess.IsCompleted;
             lbl_orderNumber.Text = _thisMechineProcess.OrderNumber;
         }
 
@@ -889,7 +889,7 @@ namespace AutoBagBench
                     {
                         M221Plc.SetHmiState(HmiState.ReadyAndWaitForNewReference);
                         btn_ChangeReference.Visible = true;
-                        btn_CloseReference.Visible = true;
+                        //btn_CloseReference.Visible = true;
                     }
                 }
             }
