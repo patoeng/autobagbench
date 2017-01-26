@@ -81,6 +81,8 @@
             this.panel24 = new System.Windows.Forms.Panel();
             this.label15 = new System.Windows.Forms.Label();
             this.panel61 = new System.Windows.Forms.Panel();
+            this.btn_ChangePassword = new System.Windows.Forms.Button();
+            this.btn_Login = new System.Windows.Forms.Button();
             this.btn_ChangeReference = new System.Windows.Forms.Button();
             this.btn_CloseReference = new System.Windows.Forms.Button();
             this.btn_MuteAlarm = new System.Windows.Forms.Button();
@@ -821,6 +823,8 @@
             // panel61
             // 
             this.panel61.BackColor = System.Drawing.Color.White;
+            this.panel61.Controls.Add(this.btn_ChangePassword);
+            this.panel61.Controls.Add(this.btn_Login);
             this.panel61.Controls.Add(this.btn_ChangeReference);
             this.panel61.Controls.Add(this.btn_CloseReference);
             this.panel61.Controls.Add(this.btn_MuteAlarm);
@@ -831,9 +835,34 @@
             this.panel61.Size = new System.Drawing.Size(486, 57);
             this.panel61.TabIndex = 2;
             // 
+            // btn_ChangePassword
+            // 
+            this.btn_ChangePassword.BackColor = System.Drawing.Color.Lavender;
+            this.btn_ChangePassword.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_ChangePassword.Location = new System.Drawing.Point(153, 3);
+            this.btn_ChangePassword.Name = "btn_ChangePassword";
+            this.btn_ChangePassword.Size = new System.Drawing.Size(88, 48);
+            this.btn_ChangePassword.TabIndex = 9;
+            this.btn_ChangePassword.Text = "CHANGE PASSWORD";
+            this.btn_ChangePassword.UseVisualStyleBackColor = false;
+            this.btn_ChangePassword.Visible = false;
+            this.btn_ChangePassword.Click += new System.EventHandler(this.btn_ChangePassword_Click);
+            // 
+            // btn_Login
+            // 
+            this.btn_Login.BackColor = System.Drawing.Color.Lavender;
+            this.btn_Login.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_Login.Location = new System.Drawing.Point(245, 3);
+            this.btn_Login.Name = "btn_Login";
+            this.btn_Login.Size = new System.Drawing.Size(75, 48);
+            this.btn_Login.TabIndex = 8;
+            this.btn_Login.Text = "LOG IN";
+            this.btn_Login.UseVisualStyleBackColor = false;
+            this.btn_Login.Click += new System.EventHandler(this.btn_Login_Click);
+            // 
             // btn_ChangeReference
             // 
-            this.btn_ChangeReference.Location = new System.Drawing.Point(131, 3);
+            this.btn_ChangeReference.Location = new System.Drawing.Point(5, 4);
             this.btn_ChangeReference.Name = "btn_ChangeReference";
             this.btn_ChangeReference.Size = new System.Drawing.Size(120, 48);
             this.btn_ChangeReference.TabIndex = 7;
@@ -843,9 +872,9 @@
             // 
             // btn_CloseReference
             // 
-            this.btn_CloseReference.Location = new System.Drawing.Point(5, 3);
+            this.btn_CloseReference.Location = new System.Drawing.Point(108, 6);
             this.btn_CloseReference.Name = "btn_CloseReference";
-            this.btn_CloseReference.Size = new System.Drawing.Size(120, 48);
+            this.btn_CloseReference.Size = new System.Drawing.Size(39, 48);
             this.btn_CloseReference.TabIndex = 7;
             this.btn_CloseReference.Text = "Close Reference";
             this.btn_CloseReference.UseVisualStyleBackColor = true;
@@ -2173,6 +2202,8 @@
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Panel panel12;
         private System.Windows.Forms.Label lbl_orderNumber;
+        private System.Windows.Forms.Button btn_Login;
+        private System.Windows.Forms.Button btn_ChangePassword;
     }
 }
 

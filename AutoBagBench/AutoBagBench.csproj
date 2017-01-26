@@ -112,6 +112,7 @@
     <Compile Include="IndividualLabel.Designer.cs">
       <DependentUpon>IndividualLabel.cs</DependentUpon>
     </Compile>
+    <Compile Include="User.cs" />
     <Compile Include="LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>

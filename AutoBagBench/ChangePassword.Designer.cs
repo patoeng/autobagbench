@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.tb_NewPassword = new System.Windows.Forms.TextBox();
             this.btn_ChangeOk = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -42,12 +42,12 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "New Password";
             // 
-            // textBox1
+            // tb_NewPassword
             // 
-            this.textBox1.Location = new System.Drawing.Point(35, 39);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(481, 20);
-            this.textBox1.TabIndex = 1;
+            this.tb_NewPassword.Location = new System.Drawing.Point(35, 39);
+            this.tb_NewPassword.Name = "tb_NewPassword";
+            this.tb_NewPassword.Size = new System.Drawing.Size(481, 20);
+            this.tb_NewPassword.TabIndex = 1;
             // 
             // btn_ChangeOk
             // 
@@ -57,6 +57,7 @@
             this.btn_ChangeOk.TabIndex = 2;
             this.btn_ChangeOk.Text = "OK";
             this.btn_ChangeOk.UseVisualStyleBackColor = true;
+            this.btn_ChangeOk.Click += new System.EventHandler(this.btn_ChangeOk_Click);
             // 
             // ChangePassword
             // 
@@ -64,10 +65,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(619, 78);
             this.Controls.Add(this.btn_ChangeOk);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.tb_NewPassword);
             this.Controls.Add(this.label1);
             this.Name = "ChangePassword";
             this.Text = "ChangePassword";
+            this.Load += new System.EventHandler(this.ChangePassword_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -76,7 +78,7 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox tb_NewPassword;
         private System.Windows.Forms.Button btn_ChangeOk;
     }
 }

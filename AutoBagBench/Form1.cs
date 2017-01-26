@@ -11,8 +11,10 @@ namespace AutoBagBench
 {
     public partial class Form1 : Form
     {
+        public User AutoBagUser;
         public Plc M221Plc;
         public BarcodeReader BarcodeReader;
+       
         public IXs156Client Xs156Client;
         public XS156Client35.Xs156Setting Xs156Setting;
 
@@ -656,6 +658,7 @@ namespace AutoBagBench
         {
             try
             {
+                AutoBagUser = new User();
                 Text = SettingHelper.EquipmentName();
                 label1.Text = Text;
             }
@@ -812,46 +815,81 @@ namespace AutoBagBench
 
         private void btn_PLC_Click(object sender, EventArgs e)
         {
-            if (M221Plc != null)
+            if (AutoBagUser.LoggedIn)
             {
-                M221Plc.Show();
+                if (M221Plc != null)
+                {
+                    M221Plc.Show();
+                }
+            }
+            else
+            {
+                this.btn_Login_Click(this.btn_Login, null);
             }
         }
 
         private void btn_Barcode_Click(object sender, EventArgs e)
         {
-            if (BarcodeReader != null)
+            if (AutoBagUser.LoggedIn)
             {
-                BarcodeReader.Show();
+                if (BarcodeReader != null)
+                {
+                    BarcodeReader.Show();
+                }
+            }
+            else
+            {
+                this.btn_Login_Click(this.btn_Login, null);
             }
         }
 
         private void btn_GroupPrint_Click(object sender, EventArgs e)
         {
-            if (_groupLabelPrint != null && !String.IsNullOrWhiteSpace(_thisMechineProcess.ReferenceName))
+            if (AutoBagUser.LoggedIn)
             {
-                _groupLabelPrint.ActiveReference = _thisMechineProcess.Product.ReferenceName;
-                _groupLabelPrint.LoadCurrentLabel();
-                _groupLabelPrint.ShowDialog();
+                if (_groupLabelPrint != null && !String.IsNullOrWhiteSpace(_thisMechineProcess.ReferenceName))
+                {
+                    _groupLabelPrint.ActiveReference = _thisMechineProcess.Product.ReferenceName;
+                    _groupLabelPrint.LoadCurrentLabel();
+                    _groupLabelPrint.ShowDialog();
+                }
+            }
+            else
+            {
+               this.btn_Login_Click(this.btn_Login,null);
             }
         }
 
         private void btn_IndividualPrint_Click(object sender, EventArgs e)
         {
-            if (_individualPrint != null && !String.IsNullOrWhiteSpace(_thisMechineProcess.ReferenceName))
+            if (AutoBagUser.LoggedIn)
             {
-                _individualPrint.ActiveReference = _thisMechineProcess.Product.ReferenceName;
-                _individualPrint.LabelPath = "XS156.lab";
-                _individualPrint.LoadCurrentLabel();
-                _individualPrint.ShowDialog();
+                if (_individualPrint != null && !String.IsNullOrWhiteSpace(_thisMechineProcess.ReferenceName))
+                {
+                    _individualPrint.ActiveReference = _thisMechineProcess.Product.ReferenceName;
+                    _individualPrint.LabelPath = "XS156.lab";
+                    _individualPrint.LoadCurrentLabel();
+                    _individualPrint.ShowDialog();
+                }
+            }
+            else
+            {
+                btn_Login_Click(this.btn_Login, null);
             }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+            if (AutoBagUser.LoggedIn)
+            {
             using (Setting ss = new Setting())
             {
                 ss.ShowDialog();
+            }
+            }
+            else
+            {
+                btn_Login_Click(this.btn_Login, null);
             }
         }
 
@@ -916,11 +954,19 @@ namespace AutoBagBench
             }
         }
         private void btn_Reference_Click(object sender, EventArgs e)
-        {
-            using (ProductReferenceList prod = new ProductReferenceList())
-            {
-                prod.ShowDialog();
-            }
+        { 
+            
+            if (AutoBagUser.LoggedIn)
+             {
+                    using (ProductReferenceList prod = new ProductReferenceList())
+                    {
+                        prod.ShowDialog();
+                    }
+                }
+                else
+                {
+                    this.btn_Login_Click(this.btn_Login, null);
+                }
         }
 
         private void btn_MuteAlarm_Click(object sender, EventArgs e)
@@ -956,6 +1002,71 @@ namespace AutoBagBench
                 docPreviewGroup.Image = new Bitmap(1, 1);
 
                 
+            }
+        }
+
+
+        private void btn_Login_Click(object sender, EventArgs e)
+        {
+            if (btn_Login.Text == "LOG IN")
+            {
+                using (var form = new LoginForm())
+                {
+                    form.ShowDialog();
+                    if (form.Result == DialogResult.OK)
+                    {
+                        if (AutoBagUser!=null)
+                        {
+                            if (AutoBagUser.Login(form.Password))
+                            {
+                                btn_Login.Text = "LOG OFF";
+                                btn_ChangePassword.Visible = true;
+                            }
+                            else
+                            {
+                                MessageBox.Show("Log in", "Password Salah!!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
+                    }
+                }
+                
+            
+
+           
+            }
+            else
+            {
+                if (AutoBagUser != null)
+                {
+                    AutoBagUser.LogOff();
+                    btn_ChangePassword.Visible = false;
+                }
+                btn_Login.Text = "LOG IN";
+            }
+        }
+
+        private void btn_ChangePassword_Click(object sender, EventArgs e)
+        {
+            if (AutoBagUser.LoggedIn)
+            {
+                using (var form = new ChangePassword())
+                {
+                    form.ShowDialog();
+                    if (form.Result == DialogResult.OK)
+                    {
+                        try
+                        {
+                            AutoBagUser.ChangePassword(form.NewPassword);
+                        }
+                        catch (Exception exception)
+                        {
+                            MessageBox.Show("Change Password", "Gagal Mengganti Password", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+                        }
+                        MessageBox.Show("Change Password", "Password Diganti", MessageBoxButtons.OK,
+                               MessageBoxIcon.Information);
+                    }
+                }
             }
         }
 

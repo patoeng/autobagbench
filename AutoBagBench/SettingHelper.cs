@@ -199,5 +199,14 @@ namespace AutoBagBench
         {
             SetCreateSetting("GroupLabelRotate", value.ToString());
         }
+        public static void SetPassword(string password)
+        {
+            SetCreateSetting("Password", password);
+        }
+        public static string GetPassword()
+        {
+            var j = (string)GetCreateSetting("Password", @"C/oXr8tjb/9jwTtkfeP9mEofPKzd2xjcmqUFOffug/xIXC0r6YIUJe9k/sOHY7cXCk+Dp7ORkELw4bC7k8GfhSA6tYwUglAQRGFam763ewl/0csodEuhen7QbI/f5B1i");
+            return j;
+        }
     }
 }
