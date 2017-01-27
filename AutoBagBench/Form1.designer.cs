@@ -1232,9 +1232,9 @@
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 4;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 300F));
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 250F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 218F));
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 52F));
             this.tableLayoutPanel6.Size = new System.Drawing.Size(932, 591);
             this.tableLayoutPanel6.TabIndex = 2;
             // 
@@ -1244,7 +1244,7 @@
             this.panel26.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel26.Location = new System.Drawing.Point(403, 303);
             this.panel26.Name = "panel26";
-            this.panel26.Size = new System.Drawing.Size(394, 244);
+            this.panel26.Size = new System.Drawing.Size(394, 212);
             this.panel26.TabIndex = 1;
             // 
             // docPreview
@@ -1252,7 +1252,7 @@
             this.docPreview.Dock = System.Windows.Forms.DockStyle.Fill;
             this.docPreview.Location = new System.Drawing.Point(0, 0);
             this.docPreview.Name = "docPreview";
-            this.docPreview.Size = new System.Drawing.Size(394, 244);
+            this.docPreview.Size = new System.Drawing.Size(394, 212);
             this.docPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.docPreview.TabIndex = 0;
             this.docPreview.TabStop = false;
@@ -1263,7 +1263,7 @@
             this.panel25.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel25.Location = new System.Drawing.Point(3, 303);
             this.panel25.Name = "panel25";
-            this.panel25.Size = new System.Drawing.Size(394, 244);
+            this.panel25.Size = new System.Drawing.Size(394, 212);
             this.panel25.TabIndex = 0;
             // 
             // docPreviewGroup
@@ -1271,7 +1271,7 @@
             this.docPreviewGroup.Dock = System.Windows.Forms.DockStyle.Fill;
             this.docPreviewGroup.Location = new System.Drawing.Point(0, 0);
             this.docPreviewGroup.Name = "docPreviewGroup";
-            this.docPreviewGroup.Size = new System.Drawing.Size(394, 244);
+            this.docPreviewGroup.Size = new System.Drawing.Size(394, 212);
             this.docPreviewGroup.TabIndex = 0;
             this.docPreviewGroup.TabStop = false;
             // 
@@ -1633,9 +1633,9 @@
             // 
             this.panel59.Controls.Add(this.groupBox1);
             this.panel59.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel59.Location = new System.Drawing.Point(3, 553);
+            this.panel59.Location = new System.Drawing.Point(3, 521);
             this.panel59.Name = "panel59";
-            this.panel59.Size = new System.Drawing.Size(394, 35);
+            this.panel59.Size = new System.Drawing.Size(394, 67);
             this.panel59.TabIndex = 4;
             // 
             // groupBox1
@@ -1645,7 +1645,7 @@
             this.groupBox1.Controls.Add(this.btn_IndividualPrint);
             this.groupBox1.Controls.Add(this.btn_GroupPrint);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox1.Location = new System.Drawing.Point(0, -29);
+            this.groupBox1.Location = new System.Drawing.Point(0, 3);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(394, 64);
             this.groupBox1.TabIndex = 8;
@@ -1703,9 +1703,9 @@
             // 
             this.panel60.Controls.Add(this.groupBox2);
             this.panel60.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel60.Location = new System.Drawing.Point(403, 553);
+            this.panel60.Location = new System.Drawing.Point(403, 521);
             this.panel60.Name = "panel60";
-            this.panel60.Size = new System.Drawing.Size(394, 35);
+            this.panel60.Size = new System.Drawing.Size(394, 67);
             this.panel60.TabIndex = 5;
             // 
             // groupBox2
@@ -1715,7 +1715,7 @@
             this.groupBox2.Controls.Add(this.btn_Barcode);
             this.groupBox2.Controls.Add(this.btn_Setting);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox2.Location = new System.Drawing.Point(0, -29);
+            this.groupBox2.Location = new System.Drawing.Point(0, 3);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(394, 64);
             this.groupBox2.TabIndex = 8;
