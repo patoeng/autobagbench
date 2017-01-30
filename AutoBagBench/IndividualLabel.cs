@@ -235,6 +235,7 @@ namespace AutoBagBench
                 {
                     // Add Handlers for Printing Events for the Active Document if necessary
                     MLppx2Manager.SwitchPrinter(SettingHelper.LabelIndividualPrinter());
+                
                     CsApp.ActiveDocument.HorzPrintOffset = SettingHelper.IndividualLabelHorizontalOffset();
                     CsApp.ActiveDocument.VertPrintOffset = SettingHelper.IndividualLabelVerticalOffset();
                     CsApp.ActiveDocument.Rotate(SettingHelper.IndividualLabelRotate());
