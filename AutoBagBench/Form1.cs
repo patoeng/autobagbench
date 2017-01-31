@@ -370,21 +370,33 @@ namespace AutoBagBench
 
         private void PrintIndividual()
         {
-            try
+            if (M221Plc != null)
+            {
+                if (M221Plc.IndividualBagLabelPrint == false)
+                {
+                    try
+                    {
+                        _individualPrint.ActiveReference = _thisMechineProcess.Product.ReferenceName;
+                        _individualPrint.LabelPath = "XS156.lab";
+                        _individualPrint.LoadCurrentLabel();
+                        _individualRealSize = (Image) _individualPrint.RealSizeImage.Clone();
+                        docPreview.Image = _individualRealSize;
+                        docPreview.SizeMode = PictureBoxSizeMode.StretchImage;
+                        _individualPrint.Print();
 
-            {
-                _individualPrint.ActiveReference=_thisMechineProcess.Product.ReferenceName;
-                _individualPrint.LabelPath = "XS156.lab";
-                _individualPrint.LoadCurrentLabel();
-                _individualRealSize =(Image) _individualPrint.RealSizeImage.Clone();
-                docPreview.Image = _individualRealSize;
-                   docPreview.SizeMode = PictureBoxSizeMode.StretchImage;
-                _individualPrint.Print();
-                Refresh();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Print Ind Label:  "+ ex.Message);
+                        M221Plc.SetIndividualBagPrinted(true);
+
+                        Refresh();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Print Ind Label:  " + ex.Message);
+                    }
+                }
+                else
+                {
+                    UpdatePlcMessage("Plastic bag sudah di print!");
+                }
             }
         }
 
@@ -862,12 +874,23 @@ namespace AutoBagBench
         {
             if (AutoBagUser.LoggedIn)
             {
-                if (_individualPrint != null && !String.IsNullOrWhiteSpace(_thisMechineProcess.ReferenceName))
+                if (M221Plc.IndividualBagLabelPrint == false)
                 {
-                    _individualPrint.ActiveReference = _thisMechineProcess.Product.ReferenceName;
-                    _individualPrint.LabelPath = "XS156.lab";
-                    _individualPrint.LoadCurrentLabel();
-                    _individualPrint.ShowDialog();
+                    if (_individualPrint != null && !String.IsNullOrWhiteSpace(_thisMechineProcess.ReferenceName))
+                    {
+                        _individualPrint.ActiveReference = _thisMechineProcess.Product.ReferenceName;
+                        _individualPrint.LabelPath = "XS156.lab";
+                        _individualPrint.LoadCurrentLabel();
+                        _individualPrint.ShowDialog();
+                        if (_individualPrint.Printed)
+                        {
+                            M221Plc.SetIndividualBagPrinted(true);
+                        }
+                    }
+                }
+                else
+                {
+                    UpdatePlcMessage("Plastic bag sudah di print!");
                 }
             }
             else

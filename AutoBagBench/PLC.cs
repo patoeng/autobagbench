@@ -75,7 +75,7 @@ namespace AutoBagBench
         public bool AccessoriesBoxM12GateOpen { get; protected set; }//MW22:X7
         public bool AccessoriesBoxM18GateOpen { get; protected set; }//MW22:X8
         public bool AccessoriesBoxM30GateOpen { get; protected set; }//MW22:X9
-
+        public bool IndividualBagLabelPrint { get; protected set; }//
         public HmiState HmiState { get; protected set; }
         public PlcMode PlcMode { get; protected set; }
         public int ErrorCode { get; protected set; }
@@ -196,6 +196,7 @@ namespace AutoBagBench
             AccessoriesBoxM12GateOpen = (data >> 7 & 0x01) == 0x01;
             AccessoriesBoxM18GateOpen = (data >> 8 & 0x01) == 0x01;
             AccessoriesBoxM30GateOpen = (data >> 9 & 0x01) == 0x01;
+            IndividualBagLabelPrint = (data >> 10 & 0x01) == 0x01;
         }
 
         private void chb_C_M8_Selected_Lamp_CheckedChanged(object sender, EventArgs e)
@@ -420,6 +421,11 @@ namespace AutoBagBench
         public void SetPlcUnMatchBarcodeAlarm()
         {
             PlcCommandHelper.SetPlcUnMatchBarcodeAlarm(_master);
+        }
+
+        public void SetIndividualBagPrinted(bool value)
+        {
+            PlcCommandHelper.IndividualBagPrinted(_master,value);
         }
     }
 }

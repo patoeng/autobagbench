@@ -25,7 +25,7 @@ namespace AutoBagBench
         public string LabelPath;
         private string _activeReference ;
         private string _referenceFamily;
-
+        public bool Printed;
         public string ActiveReference
         {
             get
@@ -221,13 +221,14 @@ namespace AutoBagBench
 
         public void Print()
         {
-
+            Printed = false;
             try
             {
                 //docPreview.Image = LoadLabel("chrono.lab");
                 if (NoDocOpened)
                 {
                     MessageBox.Show("A document must be opened to print !");
+                    Printed = false;
                     return;
                 }
 
@@ -240,22 +241,26 @@ namespace AutoBagBench
                     CsApp.ActiveDocument.VertPrintOffset = SettingHelper.IndividualLabelVerticalOffset();
                     CsApp.ActiveDocument.Rotate(SettingHelper.IndividualLabelRotate());
                     CsApp.ActiveDocument.PrintDocument(1);
-
+                    Printed = true;
+                   
                 }
                 catch (System.FormatException error)
                 {
                     MessageBox.Show("Label qty must  an integer...\n\n\n" + error.Message);
+                  
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Label "+ex.Message);
+              
             }
         }
 
         private void btn_Print_Click(object sender, EventArgs e)
         {
-            Print();
+            
+           Print();
         }
 
         private void IndividualLabel_FormClosing(object sender, FormClosingEventArgs e)
