@@ -135,7 +135,7 @@ namespace AutoBagBench
         public static void IndividualBagPrinted(Master master,bool value)
         {
             byte[] dummy = new byte[] { };
-            master.WriteSingleRegister(1, 1, 51, ModbusTcpHelper.WordArrayToByteArray(new int[] { Convert.ToInt32(value) }, 1), ref dummy);
+            master.WriteSingleRegister(1, 1, 52, ModbusTcpHelper.WordArrayToByteArray(new int[] { Convert.ToInt32(value) }, 1), ref dummy);
         }
     }
 }
