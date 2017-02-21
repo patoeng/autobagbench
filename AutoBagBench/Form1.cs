@@ -387,6 +387,7 @@ namespace AutoBagBench
                         M221Plc.SetIndividualBagPrinted(true);
 
                         Refresh();
+                        UpdatePlcMessage("");
                     }
                     catch (Exception ex)
                     {
@@ -749,10 +750,10 @@ namespace AutoBagBench
             lbl_GroupSize.Text = _groupingBox.GroupingSize.ToString("000");
             lbl_RemainingOfGroup.Text = _groupingBox.GroupRemainingQuantity.ToString("000");
             labelFinishDateTime.Text = "";
-            labelPass.Text = _thisMechineProcess.OutputQuantity.ToString("000");
+            labelPass.Text = M221Plc.OutputQuantity.ToString("000");//_thisMechineProcess.OutputQuantity.ToString("000");
             labelStartDateTime4.Text = _thisMechineProcess.StartDateTime.ToString("s");
             labelProcessable.Text = _thisMechineProcess.ProcessableQuantity.ToString("000");
-            lbl_Plasticbag.Text = _thisMechineProcess.Product.BagType.ToString();
+            lbl_Plasticbag.Text = M221Plc.RejectQuantity.ToString("000");// _thisMechineProcess.Product.BagType.ToString();
             labelReject.Text = _thisMechineProcess.RejectQuantity.ToString("000");
             labelProcessable.Text = _thisMechineProcess.ProcessableQuantity.ToString("000");
             lbl_ArticleNumber.Text = _thisMechineProcess.Product.ArticleNumber;
