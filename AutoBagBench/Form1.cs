@@ -586,18 +586,22 @@ namespace AutoBagBench
                     }
                     break;
                 case HmiState.WaitingPackingBarcodeVerify:
-                    if (VerifyArticleBarcode(data))
+                    if (M221Plc.ErrorCode == 0)
                     {
-                        M221Plc.SetHmiState(HmiState.WaitingForBigBoxEntry);
-                    }
-                    else
-                    {
-                       // var k = MessageBox.Show("Barcode un-match with current reference! Do you want to retry?", "Verify Barcode",MessageBoxButtons.YesNo,MessageBoxIcon.Error);
-                        M221Plc.SetPlcUnMatchBarcodeAlarm();
-                        M221Plc.SetHmiState(HmiState.WaitForRejectBinEntry);
-                        
+                        if (VerifyArticleBarcode(data))
+                        {
+                            M221Plc.SetHmiState(HmiState.WaitingForBigBoxEntry);
+                        }
+                        else
+                        {
+                            // var k = MessageBox.Show("Barcode un-match with current reference! Do you want to retry?", "Verify Barcode",MessageBoxButtons.YesNo,MessageBoxIcon.Error);
+                            M221Plc.SetPlcUnMatchBarcodeAlarm();
+                            M221Plc.SetHmiState(HmiState.WaitForRejectBinEntry);
+
+                        }
                     }
                     break;
+                    
             }
         }
         
@@ -753,7 +757,7 @@ namespace AutoBagBench
             labelPass.Text = M221Plc.OutputQuantity.ToString("000");//_thisMechineProcess.OutputQuantity.ToString("000");
             labelStartDateTime4.Text = _thisMechineProcess.StartDateTime.ToString("s");
             labelProcessable.Text = _thisMechineProcess.ProcessableQuantity.ToString("000");
-            lbl_Plasticbag.Text = M221Plc.RejectQuantity.ToString("000");// _thisMechineProcess.Product.BagType.ToString();
+            lbl_Plasticbag.Text = _thisMechineProcess.Product.BagType.ToString();// _thisMechineProcess.Product.BagType.ToString();
             labelReject.Text = _thisMechineProcess.RejectQuantity.ToString("000");
             labelProcessable.Text = _thisMechineProcess.ProcessableQuantity.ToString("000");
             lbl_ArticleNumber.Text = _thisMechineProcess.Product.ArticleNumber;
