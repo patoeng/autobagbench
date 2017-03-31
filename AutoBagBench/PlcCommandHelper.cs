@@ -12,12 +12,16 @@ namespace AutoBagBench
             master.WriteSingleRegister(1, 1, 3, ModbusTcpHelper.WordArrayToByteArray(new int[] { 1 }, 1),ref dummy); 
         }
 
-        public static void ResetSequence(Master master)
+        public static void ResetSequenceStart(Master master)
         {
             byte[] dummy = new byte[] { };
             master.WriteSingleRegister(1, 1, 1, ModbusTcpHelper.WordArrayToByteArray(new int[] { 1 }, 1),ref dummy); 
         }
-
+        public static void ResetSequenceComplete(Master master)
+        {
+            byte[] dummy = new byte[] { };
+            master.WriteSingleRegister(1, 1, 1, ModbusTcpHelper.WordArrayToByteArray(new int[] { 0 }, 1), ref dummy);
+        }
         public static void TellPlcHmiState(Master master, HmiState state)
         {
             byte[] dummy = new byte[] {};

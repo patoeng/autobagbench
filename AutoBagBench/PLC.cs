@@ -388,11 +388,14 @@ namespace AutoBagBench
             Hide();
         }
 
-        public void ResetAll()
+        public void ResetSequenceStart()
         {
-            PlcCommandHelper.ResetSequence(_master);
+            PlcCommandHelper.ResetSequenceStart(_master);
         }
-
+        public void ResetSequenceComplete()
+        {
+            PlcCommandHelper.ResetSequenceComplete(_master);
+        }
         public void Disconnect()
         {
             _master.disconnect();

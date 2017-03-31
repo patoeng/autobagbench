@@ -47,10 +47,13 @@ namespace AutoBagBench
             InitializeComponent();
         }
 
+        private bool reloading;
+
         private void LoadAndInitialize()
         {
             try
             {
+                reloading = true;
                 BarcodeReader = new BarcodeReader();
                 BarcodeReader.DataBarcodeReadOk += BarcodeRead;
                 try
@@ -95,7 +98,7 @@ namespace AutoBagBench
 
                 M221Plc.StartUpdater();
 
-                checkBox1.Checked = _thisMechineProcess.Traceability;
+                checkBox1.Checked = _thisMechineProcess.Traceability; // this will load traceability when the value is different than default.
 
                 if (!checkBox1.Checked)
                 {
@@ -107,8 +110,7 @@ namespace AutoBagBench
                         {
                             M221Plc.SetOutputQuantity(_thisMechineProcess.OutputQuantity);
                             ReloadReference(_thisMechineProcess.ReferenceName, _thisMechineProcess.Target);
-                            M221Plc.SetHmiState(HmiState.WaitingForAccessories);
-                           
+                            M221Plc.SetHmiState(HmiState.WaitingForAccessories);                           
                         }
                     }
                 }
@@ -125,6 +127,7 @@ namespace AutoBagBench
 
         private void Reload()
         {
+            reloading = true;
             if (BarcodeReader != null)
             {
                 BarcodeReader.DataBarcodeReadOk -= BarcodeRead;
@@ -250,6 +253,7 @@ namespace AutoBagBench
 
         private void NewTrackingLoaded(TrackingDataBag track)
         {
+            reloading = true;
             M221Plc.SetHmiState(HmiState.NoState);
             Xs156Client.StopUpdater();
             if (!Xs156Client.IsBufferedMode())
@@ -268,6 +272,7 @@ namespace AutoBagBench
             docPreview.Image = new Bitmap(1, 1);
             docPreviewGroup.Image = new Bitmap(1, 1);
 
+            BagType oldBagType = _thisMechineProcess.Product.BagType;
             _thisMechineProcess = new Process
             {
                 EquipmentId = new Guid(Xs156Client.ThisEquipment().Id.ToString()),
@@ -289,17 +294,18 @@ namespace AutoBagBench
             {
                 M221Plc.SetHmiState(HmiState.WaitingNewReferenceFromServer);
                 UpdatePlcMessage("Reference verification failed");
+                Xs156Client.StartUpdater();
                 return;
             }
-          
 
-            M221Plc.SetOutputQuantity(track.OutputQuantity);
-            M221Plc.SetRejectQuantity(track.RejectedQuantity);
-            M221Plc.SetTargetTarget(track.TargetQuantity);
             M221Plc.SetAccessories(_thisMechineProcess.Product.AccessoriesType);
+
+            if (oldBagType != _thisMechineProcess.Product.BagType)
+            {
+                MessageBox.Show("Ganti Ukuran Plastic Bag menjadi : " + _thisMechineProcess.Product.BagType,
+                    "Change Plastic Bag", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
             Xs156Client.StartUpdater();
-            M221Plc.SetHmiState(HmiState.WaitingForProcessable);
-           
 
         }
 
@@ -325,6 +331,15 @@ namespace AutoBagBench
             lmpTraceability.BackColor = lmpTraceability.BackColor == Color.Yellow ? Color.YellowGreen : Color.Yellow;
 
             _thisMechineProcess.ProcessableQuantity = track.ProcessableQuantity;
+            if (reloading)
+            {
+
+                M221Plc.SetOutputQuantity(track.OutputQuantity);
+                M221Plc.SetRejectQuantity(track.RejectedQuantity);
+                M221Plc.SetTargetTarget(track.TargetQuantity);
+                M221Plc.SetHmiState(HmiState.WaitingForProcessable);
+                reloading = false;
+            }
             if (M221Plc.HmiState == HmiState.WaitingForProcessable)
             {
                 if (_thisMechineProcess.ProcessableQuantity > _thisMechineProcess.OutputQuantity)
@@ -362,10 +377,14 @@ namespace AutoBagBench
         }
 
         private void M221_OutputChanged(int data)
-        {if (!String.IsNullOrWhiteSpace(_thisMechineProcess.Product.ReferenceName))
-            _thisMechineProcess.SetOutputQuantity(data);
-            _groupingBox.ParseFromTotalOutput(data);
-           if(checkBox1.Checked)  Xs156Client.SetOutputQuantity(data);
+        {
+            if (!reloading)
+            {
+                if (!String.IsNullOrWhiteSpace(_thisMechineProcess.Product.ReferenceName))
+                    _thisMechineProcess.SetOutputQuantity(data);
+                _groupingBox.ParseFromTotalOutput(data);
+                if (checkBox1.Checked) Xs156Client.SetOutputQuantity(data);
+            }
         }
 
         private void PrintIndividual()
@@ -482,8 +501,11 @@ namespace AutoBagBench
         }
         private void M221_RejectChanged(int data)
         {
-            _thisMechineProcess.SetRejectQuantity(data);
-            if (checkBox1.Checked) Xs156Client.SetRejectQuantity(data);
+            if (!reloading)
+            {
+                _thisMechineProcess.SetRejectQuantity(data);
+                if (checkBox1.Checked) Xs156Client.SetRejectQuantity(data);
+            }
         }
         private void PlcDataUpdated(string data)
         {
@@ -648,7 +670,7 @@ namespace AutoBagBench
             {
                 if (M221Plc != null)
                 {
-                    M221Plc.ResetAll();
+                    M221Plc.ResetSequenceStart();
                 }
                 if (Xs156Client != null)
                 {
@@ -717,7 +739,7 @@ namespace AutoBagBench
                     _groupingBox = new GroupingBox(0);
                     ReAssignGroupingEvents();
                     _thisMechineProcess.CompleteProcess();
-                    M221Plc.ResetAll();
+                    M221Plc.ResetSequenceStart();
                     M221Plc.SetOutputQuantity(0);
                     M221Plc.SetRejectQuantity(0);
                     M221Plc.SetHmiState(HmiState.ReadyAndWaitForNewReference);
@@ -939,7 +961,7 @@ namespace AutoBagBench
                 if (M221Plc != null)
                 {
                     M221Plc.StartUpdater();
-                    M221Plc.ResetAll();
+                    M221Plc.ResetSequenceStart();
                 }
                 UpdatePcMessage("Reset Done");
                 if (M221Plc != null)
@@ -1017,7 +1039,7 @@ namespace AutoBagBench
             if (result == DialogResult.Yes)
             {
                
-                M221Plc.ResetAll();
+                M221Plc.ResetSequenceStart();
                 M221Plc.SetOutputQuantity(0);
                 M221Plc.SetRejectQuantity(0);
                 M221Plc.SetHmiState(HmiState.ReadyAndWaitForNewReference);
