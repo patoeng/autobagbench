@@ -3,9 +3,9 @@ using System.Net;
 
 namespace AutoBagBench
 {
-    public class ModbusTcpHelper
+    public static class ModbusTcpHelper
     {
-        static public int[] ByteArrayToWordArray (byte[] dataBytes)
+        public static int[] ByteArrayToWordArray (byte[] dataBytes)
         {
             if (dataBytes.Length < 2) return null;
             var word = new int[dataBytes.Length / 2];
@@ -16,10 +16,10 @@ namespace AutoBagBench
             return word;
         }
 
-        static public byte[] WordArrayToByteArray(int[] dataWord, int num)
+        public static byte[] WordArrayToByteArray(int[] dataWord, int num)
         {
 
-            var data = new Byte[num * 2];
+            var data = new byte[num * 2];
             for (int x = 0; x < num; x++)
             {
                 byte[] dat = BitConverter.GetBytes((short)IPAddress.HostToNetworkOrder((short) dataWord[x]));

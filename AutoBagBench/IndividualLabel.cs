@@ -292,5 +292,10 @@ namespace AutoBagBench
                 MessageBox.Show(exception.Message);
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(CsApp.ActiveDocument.Variables.Formulas.Item("Barcode").Value);
+        }
     }
 }
