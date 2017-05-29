@@ -1,13 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO.Ports;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AutoBagBench
@@ -31,8 +23,8 @@ namespace AutoBagBench
 
         private void Init()
         {
-            SerialPortBarcode.DataReceived += new SerialDataReceivedEventHandler(EventHandlerSerialPort);
-            _serialDataRecievedDelegate = new StringFunctionDelegate(BarcodeRead);
+            SerialPortBarcode.DataReceived += EventHandlerSerialPort;
+            _serialDataRecievedDelegate = BarcodeRead;
             try
             {
                 SerialPortBarcode.PortName = SettingHelper.BarcodeReaderComName();
@@ -40,7 +32,9 @@ namespace AutoBagBench
             }
             catch (Exception ex)
             {
-
+                if (Visible)
+                MessageBox.Show(@"Barcode Init Error :" + ex.Message, @"Barcode Init", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -54,7 +48,9 @@ namespace AutoBagBench
             string reference="";
             string ordernumber="";
             if (ParseBarcode(data,ref reference, ref ordernumber))
-            if (DataBarcodeReadOk != null) DataBarcodeReadOk(reference,ordernumber);
+            {
+                DataBarcodeReadOk?.Invoke(reference,ordernumber);
+            }
         }
 
         private bool ParseBarcode(string data, ref string reference, ref string ordernumber)
