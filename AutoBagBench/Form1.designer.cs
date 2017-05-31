@@ -51,6 +51,7 @@
             this.panel19 = new System.Windows.Forms.Panel();
             this.label24 = new System.Windows.Forms.Label();
             this.panel12 = new System.Windows.Forms.Panel();
+            this.btnLoadOrderNumber = new System.Windows.Forms.Button();
             this.lbl_orderNumber = new System.Windows.Forms.Label();
             this.panel63 = new System.Windows.Forms.Panel();
             this.label26 = new System.Windows.Forms.Label();
@@ -521,12 +522,23 @@
             // 
             // panel12
             // 
+            this.panel12.Controls.Add(this.btnLoadOrderNumber);
             this.panel12.Controls.Add(this.lbl_orderNumber);
             this.panel12.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel12.Location = new System.Drawing.Point(177, 389);
             this.panel12.Name = "panel12";
             this.panel12.Size = new System.Drawing.Size(305, 53);
             this.panel12.TabIndex = 17;
+            // 
+            // btnLoadOrderNumber
+            // 
+            this.btnLoadOrderNumber.Location = new System.Drawing.Point(226, 5);
+            this.btnLoadOrderNumber.Name = "btnLoadOrderNumber";
+            this.btnLoadOrderNumber.Size = new System.Drawing.Size(75, 44);
+            this.btnLoadOrderNumber.TabIndex = 1;
+            this.btnLoadOrderNumber.Text = "Load Order Number";
+            this.btnLoadOrderNumber.UseVisualStyleBackColor = true;
+            this.btnLoadOrderNumber.Click += new System.EventHandler(this.btnLoadOrderNumber_Click);
             // 
             // lbl_orderNumber
             // 
@@ -839,7 +851,7 @@
             // 
             this.btn_ChangePassword.BackColor = System.Drawing.Color.Lavender;
             this.btn_ChangePassword.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_ChangePassword.Location = new System.Drawing.Point(153, 3);
+            this.btn_ChangePassword.Location = new System.Drawing.Point(170, 3);
             this.btn_ChangePassword.Name = "btn_ChangePassword";
             this.btn_ChangePassword.Size = new System.Drawing.Size(88, 48);
             this.btn_ChangePassword.TabIndex = 9;
@@ -852,9 +864,9 @@
             // 
             this.btn_Login.BackColor = System.Drawing.Color.Lavender;
             this.btn_Login.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Login.Location = new System.Drawing.Point(245, 3);
+            this.btn_Login.Location = new System.Drawing.Point(264, 3);
             this.btn_Login.Name = "btn_Login";
-            this.btn_Login.Size = new System.Drawing.Size(75, 48);
+            this.btn_Login.Size = new System.Drawing.Size(56, 48);
             this.btn_Login.TabIndex = 8;
             this.btn_Login.Text = "LOG IN";
             this.btn_Login.UseVisualStyleBackColor = false;
@@ -864,7 +876,7 @@
             // 
             this.btn_ChangeReference.Location = new System.Drawing.Point(5, 4);
             this.btn_ChangeReference.Name = "btn_ChangeReference";
-            this.btn_ChangeReference.Size = new System.Drawing.Size(120, 48);
+            this.btn_ChangeReference.Size = new System.Drawing.Size(79, 48);
             this.btn_ChangeReference.TabIndex = 7;
             this.btn_ChangeReference.Text = "Change Reference";
             this.btn_ChangeReference.UseVisualStyleBackColor = true;
@@ -872,13 +884,12 @@
             // 
             // btn_CloseReference
             // 
-            this.btn_CloseReference.Location = new System.Drawing.Point(108, 6);
+            this.btn_CloseReference.Location = new System.Drawing.Point(88, 4);
             this.btn_CloseReference.Name = "btn_CloseReference";
-            this.btn_CloseReference.Size = new System.Drawing.Size(39, 48);
+            this.btn_CloseReference.Size = new System.Drawing.Size(77, 48);
             this.btn_CloseReference.TabIndex = 7;
-            this.btn_CloseReference.Text = "Close Reference";
+            this.btn_CloseReference.Text = "Close Order Number";
             this.btn_CloseReference.UseVisualStyleBackColor = true;
-            this.btn_CloseReference.Visible = false;
             this.btn_CloseReference.Click += new System.EventHandler(this.button6_Click);
             // 
             // btn_MuteAlarm
@@ -1008,7 +1019,7 @@
             this.checkBox1.FlatAppearance.BorderColor = System.Drawing.Color.Red;
             this.checkBox1.FlatAppearance.BorderSize = 2;
             this.checkBox1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.checkBox1.Location = new System.Drawing.Point(8, 5);
+            this.checkBox1.Location = new System.Drawing.Point(3, 3);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(88, 23);
             this.checkBox1.TabIndex = 7;
@@ -2204,6 +2215,7 @@
         private System.Windows.Forms.Label lbl_orderNumber;
         private System.Windows.Forms.Button btn_Login;
         private System.Windows.Forms.Button btn_ChangePassword;
+        private System.Windows.Forms.Button btnLoadOrderNumber;
     }
 }
 

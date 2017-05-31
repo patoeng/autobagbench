@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AutoBagBench
@@ -16,16 +10,16 @@ namespace AutoBagBench
         public Lppx2Manager MLppx2Manager = null;
         public LabelManager2.Application CsApp = null;
         public bool NoDocOpened = true;
-        private System.String _csPath;
-        private System.Int32 _picDefW;
-        private System.Int32 _picDefH;
-        private System.Drawing.Image _currentImage;
-        public System.Drawing.Image RealSizeImage;
+        private int _picDefW;
+        private int _picDefH;
+        private Image _currentImage;
+        public   Image RealSizeImage;
         private Image.GetThumbnailImageAbort _myCallback;
         public string LabelPath;
         private string _activeReference ;
         private string _referenceFamily;
         public bool Printed;
+        private LabelManager2.Document _loadedDocument;
         public string ActiveReference
         {
             get
@@ -36,14 +30,7 @@ namespace AutoBagBench
             {
                 _activeReference = value;
                 var reg = Regex.Match(_activeReference, @"XS\d{1}");
-                if (reg.Success)
-                {
-                    _referenceFamily = reg.Value;
-                }
-                else
-                {
-                    _referenceFamily = "";
-                }
+                _referenceFamily = reg.Success ? reg.Value : "";
             }
         }
 
@@ -58,7 +45,7 @@ namespace AutoBagBench
              {
                  throw ex;
              }
-             _myCallback = new Image.GetThumbnailImageAbort(ThumbnailCallback);
+             _myCallback = ThumbnailCallback;
         }
 
         private bool ThumbnailCallback()
@@ -73,7 +60,7 @@ namespace AutoBagBench
 
         public string LabelFullPath()
         {
-            return SettingHelper.LabelIndividualPath() + "\\" + LabelPath;
+            return SettingHelper.LabelIndividualPath() + @"\" + LabelPath;
         }
         private void IndividualLabel_Load(object sender, EventArgs e)
         {
@@ -81,7 +68,7 @@ namespace AutoBagBench
             _picDefH = docPreview.Height;
             var j = LabelFullPath();
             docPreview.Image = LoadLabel(j);
-            lbl_Path.Text = SettingHelper.LabelIndividualPath() + "\\" + LabelPath;
+            lbl_Path.Text = SettingHelper.LabelIndividualPath() + @"\" + LabelPath;
             lbl_Printer.Text = SettingHelper.LabelIndividualPrinter();
 
             tb_Left.Text = SettingHelper.IndividualLabelHorizontalOffset().ToString();
@@ -92,19 +79,13 @@ namespace AutoBagBench
         {
             try
             {
-                if (CsApp.Documents.Count > 0)
-                {
-                    CsApp.Documents.CloseAll(false);
-                }
+                _loadedDocument?.Close();
 
 
-                CsApp.Documents.Open( path, false);
-                CsApp.ActiveDocument.Variables.Item("ImagePath").Value = SettingHelper.LabelIndividualImagePath() + @"\" +
+                _loadedDocument = CsApp.Documents.Open( path, false);
+                _loadedDocument.Variables.Item("ImagePath").Value = SettingHelper.LabelIndividualImagePath() + @"\" +
                                                                          _referenceFamily + @"\" + _activeReference +
                                                                          ".jpg";
-
-                // Set the Form Caption
-                //Text = CsApp.ActivePrinterName;
 
                 if (CsApp.Documents.Count > 0)
                     NoDocOpened = false;
@@ -112,21 +93,21 @@ namespace AutoBagBench
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Load Individual Label " + ex.Message);
+                MessageBox.Show(@"Load Individual Label " + ex.Message);
             }
-            return NoDocOpened == true ? new Bitmap(1, 1) : DisplayPreview();
+            return NoDocOpened ? new Bitmap(1, 1) : DisplayPreview();
         }
         private Image DisplayPreview()
         {
-            if (CsApp.ActiveDocument != null)
+            if (_loadedDocument != null)
             {
                 DisposeImages();
 
                 try
                 {
 
-                    object obj = CsApp.ActiveDocument.GetPreview(true, true, 100);
-                    if (obj is System.Array)
+                    object obj = _loadedDocument.GetPreview(true, true, 100);
+                    if (obj is Array)
                     {
                         byte[] data = (byte[])obj;
 
@@ -140,48 +121,31 @@ namespace AutoBagBench
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Load Preview Individual Label " + ex.Message);
+                    MessageBox.Show(@"Load Preview Individual Label " + ex.Message);
                 }
             }
             return _currentImage;
         }
         private void DisposeImages()
         {
-            if (RealSizeImage != null)
-            {
-                RealSizeImage.Dispose();
-            }
-
-            if (_currentImage != null)
-            {
-                _currentImage.Dispose();
-            }
-
+            RealSizeImage?.Dispose();
+            _currentImage?.Dispose();
         }
         private void ResizeIfNeeded()
         {
-            // If image width is greater than the pictureBox width 
-            // OR
-            // image height is greater than the pictureBox height
-            // then it must be resized...
             if (_currentImage != null && Visible)
             {
                 if ((_currentImage.Width > _picDefW) || (_currentImage.Height > _picDefH))
                 {
-                    // which one (width or height) must be used to resize ?
                     if ((_currentImage.Width / _picDefW) > (_currentImage.Height / _picDefH))
                     {
-                        // Must use width to resize
                         double a = ((double)_picDefW) / (((double)_currentImage.Width));
                         _currentImage = _currentImage.GetThumbnailImage(_picDefW, (int)((double)_currentImage.Height * a), _myCallback, IntPtr.Zero);
                     }
                     else
                     {
-                        // Must use Height to resize
                         double a = ((double)_picDefH) / (((double)_currentImage.Height));
                         _currentImage = _currentImage.GetThumbnailImage((int)((double)_currentImage.Width * a), _picDefH, _myCallback, IntPtr.Zero);
-
-                        //	currentImage = currentImage.GetThumbnailImage((int)(currentImage.Width/(currentImage.Height / picDefH)),picDefH, myCallback, IntPtr.Zero);
                     }
                 }
             }
@@ -189,29 +153,20 @@ namespace AutoBagBench
         }
         public Image ResizeIfNeeded(int width, int height)
         {
-            // If image width is greater than the pictureBox width 
-            // OR
-            // image height is greater than the pictureBox height
-            // then it must be resized...
             var editImage = _currentImage;
             if (_currentImage != null)
             {
                 if ((_currentImage.Width > width) || (_currentImage.Height > height))
                 {
-                    // which one (width or height) must be used to resize ?
                     if ((_currentImage.Width / width) > (_currentImage.Height / height))
-                    {
-                        // Must use width to resize
+                    {                  
                         double a = ((double)width) / (((double)_currentImage.Width));
                         editImage = _currentImage.GetThumbnailImage(width, (int)((double)_currentImage.Height * a), _myCallback, IntPtr.Zero);
                     }
                     else
-                    {
-                        // Must use Height to resize
+                    {                       
                         double a = ((double)height) / (((double)_currentImage.Height));
-                        editImage = _currentImage.GetThumbnailImage((int)((double)_currentImage.Width * a), _picDefH, _myCallback, IntPtr.Zero);
-
-                        //	currentImage = currentImage.GetThumbnailImage((int)(currentImage.Width/(currentImage.Height / picDefH)),picDefH, myCallback, IntPtr.Zero);
+                        editImage = _currentImage.GetThumbnailImage((int)((double)_currentImage.Width * a), _picDefH, _myCallback, IntPtr.Zero);                     
                     }
                 }
             }
@@ -223,36 +178,33 @@ namespace AutoBagBench
         {
             Printed = false;
             try
-            {
-                //docPreview.Image = LoadLabel("chrono.lab");
+            { 
                 if (NoDocOpened)
                 {
-                    MessageBox.Show("A document must be opened to print !");
+                    MessageBox.Show(@"A document must be opened to print !");
                     Printed = false;
                     return;
                 }
 
                 try
                 {
-                    // Add Handlers for Printing Events for the Active Document if necessary
-                    MLppx2Manager.SwitchPrinter(SettingHelper.LabelIndividualPrinter());
-                
-                    CsApp.ActiveDocument.HorzPrintOffset = SettingHelper.IndividualLabelHorizontalOffset();
-                    CsApp.ActiveDocument.VertPrintOffset = SettingHelper.IndividualLabelVerticalOffset();
-                    CsApp.ActiveDocument.Rotate(SettingHelper.IndividualLabelRotate());
-                    CsApp.ActiveDocument.PrintDocument(1);
+                    _loadedDocument.Printer.SwitchTo(SettingHelper.LabelIndividualPrinter());
+                    _loadedDocument.HorzPrintOffset = SettingHelper.IndividualLabelHorizontalOffset();
+                    _loadedDocument.VertPrintOffset = SettingHelper.IndividualLabelVerticalOffset();
+                    _loadedDocument.Rotate(SettingHelper.IndividualLabelRotate());
+                    _loadedDocument.PrintDocument(1);
                     Printed = true;
                    
                 }
-                catch (System.FormatException error)
+                catch (FormatException error)
                 {
-                    MessageBox.Show("Label qty must  an integer...\n\n\n" + error.Message);
+                    MessageBox.Show(@"Label qty must  an integer...\n\n\n" + error.Message);
                   
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Label "+ex.Message);
+                MessageBox.Show(@"Label "+ex.Message);
               
             }
         }
@@ -293,9 +245,6 @@ namespace AutoBagBench
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show(CsApp.ActiveDocument.Variables.Formulas.Item("Barcode").Value);
-        }
+      
     }
 }

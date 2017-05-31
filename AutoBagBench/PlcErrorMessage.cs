@@ -50,13 +50,13 @@
                     i = "Tidak Boleh ambil Accessories  M8.";
                     break;
                 case 14:
-                    i = "Tidak Boleh ambil Accessories  #2.";
+                    i = "Tidak Boleh ambil Accessories  M12.";
                     break;
                 case 15:
-                    i = "Tidak Boleh ambil Accessories  #3.";
+                    i = "Tidak Boleh ambil Accessories  M18.";
                     break;
                 case 16:
-                    i = "Tidak Boleh ambil Accessories  #4.";
+                    i = "Tidak Boleh ambil Accessories  M30.";
                     break;
                 case 17:
                     i = "Accessories yang dimasukkan salah.";
@@ -74,7 +74,7 @@
                     i = "Belum Boleh ambil Accessories  M18.";
                     break;
                 case 22:
-                    i = "Belum Boleh ambil Accessories  M30";
+                    i = "Belum Boleh ambil Accessories  M30.";
                     break;
                 case 23:
                     i = "Article Barcode Salah!";

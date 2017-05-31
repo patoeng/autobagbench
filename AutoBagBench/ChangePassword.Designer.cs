@@ -48,6 +48,7 @@
             this.tb_NewPassword.Name = "tb_NewPassword";
             this.tb_NewPassword.Size = new System.Drawing.Size(481, 20);
             this.tb_NewPassword.TabIndex = 1;
+            this.tb_NewPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tb_NewPassword_KeyDown);
             // 
             // btn_ChangeOk
             // 

@@ -1,12 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AutoBagBench
@@ -29,8 +21,21 @@ namespace AutoBagBench
         {
             Password = tb_Password.Text;
             Result = DialogResult.OK;
-            this.Hide();
-            this.Close();
+            Hide();
+            Close();
+        }
+
+        private void tb_Password_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btn_Login_Click(btn_Login,null);
+            }
+        }
+
+        private void LoginForm_Shown(object sender, EventArgs e)
+        {
+            tb_Password.Focus();
         }
     }
 }

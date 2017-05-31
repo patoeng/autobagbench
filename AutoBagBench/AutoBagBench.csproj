@@ -113,6 +113,12 @@
     <Compile Include="IndividualLabel.Designer.cs">
       <DependentUpon>IndividualLabel.cs</DependentUpon>
     </Compile>
+    <Compile Include="OpenProcessList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OpenProcessList.Designer.cs">
+      <DependentUpon>OpenProcessList.cs</DependentUpon>
+    </Compile>
     <Compile Include="User.cs" />
     <Compile Include="LoginForm.cs">
       <SubType>Form</SubType>
@@ -185,6 +191,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OpenProcessList.resx">
+      <DependentUpon>OpenProcessList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PLC.resx">
       <DependentUpon>PLC.cs</DependentUpon>
