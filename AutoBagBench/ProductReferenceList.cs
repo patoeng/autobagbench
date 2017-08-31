@@ -43,7 +43,7 @@ namespace AutoBagBench
                 View.Text = "View";
                 dataGV1.Rows.Add(new object[]
                 {
-                  datas.Id.ToString(), datas.ReferenceName, datas.ArticleNumber,datas.GroupingSize , datas.BagType, datas.AccessoriesType,"Delete","View","Edit","Add"
+                  datas.Id.ToString(), datas.ReferenceName, datas.ArticleNumber,datas.GroupingSize , datas.BagType, datas.AccessoriesType, datas.LabelFile,"Delete","View","Edit","Add"
                 });
             }
         }

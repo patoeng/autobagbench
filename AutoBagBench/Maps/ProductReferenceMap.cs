@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using FluentNHibernate.Mapping;
 
 namespace AutoBagBench.Maps
@@ -17,6 +13,7 @@ namespace AutoBagBench.Maps
             Map(x => x.BagType);
             Map(x => x.ArticleNumber);
             Map(x => x.GroupingSize);
+            Map(x => x.LabelFile);
             Table("ProductReference");
         }
     }

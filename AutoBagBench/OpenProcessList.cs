@@ -11,6 +11,8 @@ namespace AutoBagBench
             dgvList.Columns.Add("clmOrderNumber","Order Number");
             dgvList.Columns.Add("clmProductReference", "Product Reference");
             dgvList.Columns.Add("clmStartDate", "Start Date");
+
+            dgvList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
 
         public string SelectedOrderNumber;

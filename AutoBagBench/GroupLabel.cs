@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -54,8 +52,9 @@ namespace AutoBagBench
                 _loadedDocument.Variables.Item("Model").Value = ActiveReference;
                 _loadedDocument.Variables.Item("DateCode").Value = DateCode.GetDateCode(DateTime.Now);
 
-                if (_loadedDocument==null)
+                if (CsApp.Documents.Count > 0)
                     NoDocOpened = false;
+              
 
             }
             catch (Exception ex)
@@ -211,6 +210,11 @@ namespace AutoBagBench
             {
                 MessageBox.Show(exception.Message);
             }
+        }
+
+        private void btnReload_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

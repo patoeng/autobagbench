@@ -35,6 +35,7 @@
             this.GroupingSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BagTypeCell = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.AccessoriesType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.clmLabelFile = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Delete = new System.Windows.Forms.DataGridViewButtonColumn();
             this.View = new System.Windows.Forms.DataGridViewButtonColumn();
             this.Edit = new System.Windows.Forms.DataGridViewButtonColumn();
@@ -52,6 +53,7 @@
             this.GroupingSize,
             this.BagTypeCell,
             this.AccessoriesType,
+            this.clmLabelFile,
             this.Delete,
             this.View,
             this.Edit,
@@ -93,6 +95,11 @@
             // 
             this.AccessoriesType.HeaderText = "ACCESSORIES TYPE";
             this.AccessoriesType.Name = "AccessoriesType";
+            // 
+            // clmLabelFile
+            // 
+            this.clmLabelFile.HeaderText = "Label File";
+            this.clmLabelFile.Name = "clmLabelFile";
             // 
             // Delete
             // 
@@ -141,10 +148,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn GroupingSize;
         private System.Windows.Forms.DataGridViewTextBoxColumn BagTypeCell;
         private System.Windows.Forms.DataGridViewTextBoxColumn AccessoriesType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn clmLabelFile;
         private System.Windows.Forms.DataGridViewButtonColumn Delete;
         private System.Windows.Forms.DataGridViewButtonColumn View;
         private System.Windows.Forms.DataGridViewButtonColumn Edit;
         private System.Windows.Forms.DataGridViewButtonColumn ADD;
-
     }
 }

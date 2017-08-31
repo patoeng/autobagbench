@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AutoBagBench
 {
@@ -140,9 +136,7 @@ namespace AutoBagBench
         public static string DatabaseConnection()
         {
             return
-                String.Format(
-                    "Data Source={0};Initial Catalog={1};Persist Security Info=True;User ID=sa;Password=passwordsa;MultipleActiveResultSets=True;Max Pool Size=500",
-                    DataBaseServer(),DataBaseCatalogue());
+                $"Data Source={DataBaseServer()};Initial Catalog={DataBaseCatalogue()};Persist Security Info=True;User ID=sa;Password=passwordsa;MultipleActiveResultSets=True;Max Pool Size=500";
         }
 
         public static int GroupLabelHorizontalOffset()
@@ -207,6 +201,10 @@ namespace AutoBagBench
         {
             var j = (string)GetCreateSetting("Password", @"C/oXr8tjb/9jwTtkfeP9mEofPKzd2xjcmqUFOffug/xIXC0r6YIUJe9k/sOHY7cXCk+Dp7ORkELw4bC7k8GfhSA6tYwUglAQRGFam763ewl/0csodEuhen7QbI/f5B1i");
             return j;
+        }
+        public static string GetDatabaseConnection()
+        {
+            return (string)GetCreateSetting("DatabaseConnection", $"Data Source=127.0.0.1;Initial Catalog=XS156TRAC;Persist Security Info=True;User ID=sa;Password=passwordsa;MultipleActiveResultSets=True;Max Pool Size=500;");
         }
     }
 }

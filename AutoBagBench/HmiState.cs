@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AutoBagBench
+﻿namespace AutoBagBench
 {
     public enum HmiState
     {
@@ -18,6 +12,8 @@ namespace AutoBagBench
         WaitForRejectBinEntry,
         WaitingNewReferenceFromServer,
         WaitingForSealer,
-        WaitingForProcessable
+        WaitingForProcessable,
+        LoadingWorkOrder,
+        ChangeBigBox
     }
 }

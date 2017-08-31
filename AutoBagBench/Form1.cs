@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Windows.Forms;
+using Microsoft.ApplicationBlocks.Data;
 using XS156Client35;
 using XS156Client35.Models;
 using static System.String;
@@ -40,6 +43,8 @@ namespace AutoBagBench
         private TrackingBagDelegate _trackingBagHandler;
 
         private Equipment _equipment;
+
+        private bool _manual;
         public Form1()
         {
             
@@ -53,6 +58,7 @@ namespace AutoBagBench
             try
             {
                 _reloading = true;
+                
                 BarcodeReader = new BarcodeReader();
                 BarcodeReader.DataBarcodeReadOk += BarcodeRead;
                 try
@@ -63,16 +69,17 @@ namespace AutoBagBench
                 {
                     MessageBox.Show(exception.Message);
                 }
+                UnAssignGroupEvent();
 
-                _groupingBox = new GroupingBox(0);
+                _groupingBox = new GroupingBox();
                 ReAssignGroupingEvents();
                 LblRemaining = new StringDelegate(LblRemainingUpdate);
                 TargetReachedGroup = new StringDelegate(GroupBoxCompleted);
 
-                _individualPrint = new IndividualLabel() { LabelPath = "" };
+                _individualPrint = new IndividualLabel { LabelPath = "" };
                 _groupLabelPrint = new GroupLabel();
 
-                _equipment = new Equipment()
+                _equipment = new Equipment
                 {
                     Id = new Guid(SettingHelper.EquipmentIdentity()),
                     EquipmentName = SettingHelper.EquipmentName()
@@ -90,8 +97,7 @@ namespace AutoBagBench
 
                 DelegateFunction += PlcDataUpdated;
                 DelegateFunction2 += BarcodeScanned;
-                M221Plc.SetOutputQuantity(0);
-                M221Plc.SetRejectQuantity(0);
+               
                 M221Plc.SetHmiState(HmiState.NoState);
                 M221Plc.SetPlcMode(PlcMode.Auto);
 
@@ -109,7 +115,8 @@ namespace AutoBagBench
                         {
                             M221Plc.SetOutputQuantity(_thisMechineProcess.OutputQuantity);
                             ReloadReference(_thisMechineProcess.ReferenceName);
-                            M221Plc.SetHmiState(HmiState.WaitingForAccessories);                           
+                            M221Plc.SetHmiState(HmiState.WaitingForAccessories);
+                            _groupingBox.ParseFromTotalOutput(_thisMechineProcess.OutputQuantity);
                         }
                     }
                 }
@@ -126,7 +133,8 @@ namespace AutoBagBench
 
         private void Reload()
         {
-            _reloading = true;
+           
+           
             if (BarcodeReader != null)
             {
                 BarcodeReader.DataBarcodeReadOk -= BarcodeRead;
@@ -138,9 +146,8 @@ namespace AutoBagBench
             _individualPrint?.CloseApp();
             _groupLabelPrint?.CloseApp();
             _individualPrint = new IndividualLabel() { LabelPath = "" };
-            _groupLabelPrint = new GroupLabel();
-
-            _groupingBox = new GroupingBox(0);
+            UnAssignGroupEvent();
+            _groupLabelPrint = new GroupLabel();           
             ReAssignGroupingEvents();
             LblRemaining = LblRemainingUpdate;
             TargetReachedGroup = GroupBoxCompleted;
@@ -192,11 +199,12 @@ namespace AutoBagBench
                         M221Plc.SetOutputQuantity(_thisMechineProcess.OutputQuantity);
                         ReloadReference(_thisMechineProcess.ReferenceName);
                         M221Plc.SetHmiState(HmiState.WaitingForAccessories);
+                        _groupingBox.ParseFromTotalOutput(_thisMechineProcess.OutputQuantity);
                     }
 
                 }
            }
-
+            chb_AutoManual.CheckState = CheckState.Unchecked;
             M221Plc.StartUpdater();
             timerClock.Start();
         }
@@ -221,20 +229,25 @@ namespace AutoBagBench
 
         private void GroupRemainingChanged(int data)
         {
-            Invoke(new StringDelegate(LblRemaining), new object[] {data.ToString()});
+            Invoke(new StringDelegate(LblRemaining), data.ToString());
         }
 
         public void LblRemainingUpdate(string data)
         {
             lbl_RemainingOfGroup.Text = data;
+            lblPacked.Text = _groupingBox?.ToString();
         }
         private void GroupTargetIsReached(int data)
         {
-            Invoke(new StringDelegate(TargetReachedGroup), new object[] { data.ToString() });
+            Invoke(new StringDelegate(TargetReachedGroup), data.ToString());
         }
         public void GroupBoxCompleted(string data)
         {
             PrintGroup();
+            M221Plc.SetHmiState(HmiState.ChangeBigBox);
+            //MessageBox.Show(@"Big Box Quantity sudah terpenuhi! Segera ganti Big Box", @"Big Box Penuh",
+            //    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            M221Plc.SetHmiState(HmiState.WaitingForAccessories);
         }
 
         private void ReAssignGroupingEvents()
@@ -243,31 +256,36 @@ namespace AutoBagBench
             _groupingBox.GroupingRemainingChangedEvent += GroupRemainingChanged;
         }
 
+        private void UnAssignGroupEvent()
+        {
+            if (_groupingBox == null) return;
+            _groupingBox.GroupingTargetReachedEvent -= GroupTargetIsReached;
+            _groupingBox.GroupingRemainingChangedEvent -= GroupRemainingChanged;
+        }
+
         private void NewTrackingLoaded(TrackingDataBag track)
         {
-            _reloading = true;
-            M221Plc.SetHmiState(HmiState.NoState);
+            M221Plc.SetHmiState(HmiState.LoadingWorkOrder);
             Xs156Client.StopUpdater();
-            if (!Xs156Client.IsBufferedMode())
+            _reloading = true;
+            if (track.TrackingIdentity != lbl_ProcessId.Text)
             {
+                chb_AutoManual.CheckState = CheckState.Unchecked;
                 Xs156Client.Reload();
+            }
+            
+            
+                //Xs156Client.Reload();
                 btn_ChangeReference.Visible = false;
-                btn_CloseReference.Visible = false;
-            }
-            else
-            {
-                btn_ChangeReference.Visible = true;
                 btn_CloseReference.Visible = true;
-            }
-            M221Plc.SetOutputQuantity(0);
-            M221Plc.SetRejectQuantity(0);
+                     
             docPreview.Image = new Bitmap(1, 1);
             docPreviewGroup.Image = new Bitmap(1, 1);
 
             BagType oldBagType = _thisMechineProcess.Product.BagType;
             _thisMechineProcess = new Process
             {
-                EquipmentId = new Guid(Xs156Client.ThisEquipment().Id.ToString()),
+                EquipmentId = new Guid(Xs156Client.ThisEquipment().Id),
                 ProcessGuid = new Guid(Xs156Client.ThisEquipmentReferenceProcess().ReferenceProcess.ToString()),
                 Traceability = SettingHelper.Traceability(),
                 StartDateTime =DateTime.Parse(track.StartDateTime),
@@ -275,12 +293,26 @@ namespace AutoBagBench
             };
             if (VerifyReferenceBarcode(track.CurrentReferenceName))
             {
-                _groupingBox = new GroupingBox(_thisMechineProcess.Product.GroupingSize)
+                if (_groupingBox.Reference != track.CurrentReferenceName)
                 {
-                    ProcessGuid = new Guid(track.TrackingIdentity)
-                };
-                _thisMechineProcess.ReferenceName = track.CurrentReferenceName;
-                ReAssignGroupingEvents();
+                    UnAssignGroupEvent();
+                    _groupingBox = new GroupingBox(_thisMechineProcess.Product.GroupingSize, track.CurrentReferenceName)
+                    {
+                        ProcessGuid = new Guid(track.TrackingIdentity)
+                    };
+                    _thisMechineProcess.ReferenceName = track.CurrentReferenceName;
+                    ReAssignGroupingEvents();
+                }
+                else
+                {
+                    if (_groupingBox.ArticleNumber != track.OrderNumber)
+                    {
+                        _groupingBox.SavePrevious();
+                        _groupingBox.SetArticle(track.OrderNumber);
+                       
+                    }
+                    _groupingBox.Load(_thisMechineProcess.Product.GroupingSize, track.CurrentReferenceName);
+                }
             }
             else
             {
@@ -290,13 +322,12 @@ namespace AutoBagBench
                 return;
             }
 
-            M221Plc.SetAccessories(_thisMechineProcess.Product.AccessoriesType);
-
             if (oldBagType != _thisMechineProcess.Product.BagType)
             {
-                MessageBox.Show(@"Ganti Ukuran Plastic Bag menjadi : " + _thisMechineProcess.Product.BagType,
+                MessageBox.Show(@"Ganti Ukuran Plastic Bag menjadi : " + _thisMechineProcess.Product.BagType +"\r\n"+@"Click OK jika sudah sesuai!",
                     @"Change Plastic Bag", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
+            M221Plc.SetAccessories(_thisMechineProcess.Product.AccessoriesType);
             Xs156Client.StartUpdater();
 
         }
@@ -323,16 +354,16 @@ namespace AutoBagBench
             lmpTraceability.BackColor = lmpTraceability.BackColor == Color.Yellow ? Color.YellowGreen : Color.Yellow;
 
             _thisMechineProcess.ProcessableQuantity = track.ProcessableQuantity;
-            if (_reloading)
+            if (_reloading && M221Plc!=null && M221Plc.HmiState == HmiState.LoadingWorkOrder )
             {
-
                 M221Plc.SetOutputQuantity(track.OutputQuantity);
                 M221Plc.SetRejectQuantity(track.RejectedQuantity);
                 M221Plc.SetTargetTarget(track.TargetQuantity);
-                M221Plc.SetHmiState(HmiState.WaitingForProcessable);
+                _groupingBox.ParseFromTotalOutput(track.OutputQuantity);
+                if (!_manual) M221Plc.SetHmiState(HmiState.WaitingForProcessable);
                 _reloading = false;
             }
-            if (M221Plc.HmiState == HmiState.WaitingForProcessable)
+            if (M221Plc?.HmiState == HmiState.WaitingForProcessable)
             {
                 if (_thisMechineProcess.ProcessableQuantity > _thisMechineProcess.OutputQuantity)
                 {
@@ -366,13 +397,14 @@ namespace AutoBagBench
 
         private void M221_OutputChanged(int data)
         {
-            if (!_reloading)
+            if (!_reloading && M221Plc.HmiState!=HmiState.LoadingWorkOrder)
             {
                 if (!IsNullOrWhiteSpace(_thisMechineProcess.Product.ReferenceName))
                     _thisMechineProcess.SetOutputQuantity(data);
-                _groupingBox.ParseFromTotalOutput(data);
+                    _groupingBox.ParseFromTotalOutput(data);
                 if (checkBox1.Checked) Xs156Client.SetOutputQuantity(data);
             }
+          
         }
 
         private void PrintIndividual()
@@ -384,7 +416,7 @@ namespace AutoBagBench
                     try
                     {
                         _individualPrint.ActiveReference = _thisMechineProcess.Product.ReferenceName;
-                        _individualPrint.LabelPath = "XS156.lab";
+                        _individualPrint.LabelPath = _thisMechineProcess.Product.LabelFile+".lab";
                         _individualPrint.LoadCurrentLabel();
                         _individualRealSize = (Image) _individualPrint.RealSizeImage.Clone();
                         docPreview.Image = _individualRealSize;
@@ -436,31 +468,35 @@ namespace AutoBagBench
                     UpdatePcMessage("Masukkan Sensor ke plastic Bag.");
                     break;
                 case HmiState.WaitingForAccessories:
-                    if (_thisMechineProcess.Traceability)
-                    {
-                        if (Xs156Client.GetProcessableQuantity() > _thisMechineProcess.OutputQuantity)
-                        {
-                            PrintIndividual();
-                            UpdatePcMessage("Masukkan Sensor & Accessories ke plastic Bag");
-                        }
-                        else
-                        {
-                            M221Plc.SetHmiState(HmiState.WaitingForProcessable);
-                        }
-                    }
-                    else
-                    {
-                        PrintIndividual();
-                        UpdatePcMessage("Masukkan Sensor & Accessories ke plastic Bag");
-                    }
+                    //if (_thisMechineProcess.Traceability)
+                    //{
+                    //    if (Xs156Client.GetProcessableQuantity() > _thisMechineProcess.OutputQuantity || _manual || M221Plc.MaintenanceMode)
+                    //    {
+                    //        PrintIndividual();
+                    //        UpdatePcMessage("Masukkan Sensor & Accessories ke plastic Bag");
+                    //    }
+                    //    else
+                    //    {
+                    //        M221Plc.SetHmiState(HmiState.WaitingForProcessable);
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    PrintIndividual();
+                    //    UpdatePcMessage("Masukkan Sensor & Accessories ke plastic Bag");
+                    //}
+                    PrintIndividual();
+                    UpdatePcMessage("Masukkan Sensor & Accessories ke plastic Bag");
                     break;
                 case HmiState.WaitingForSealer:
                     UpdatePcMessage("Activekan Sealer!");
                     break;
                 case HmiState.WaitForRejectBinEntry:
+                    M221Plc.SetIndividualBagPrinted(false);
                     UpdatePcMessage("Masukkan Plastic Bag ke Reject Bin");
                     break;
                 case HmiState.WaitingForBigBoxEntry:
+                    M221Plc.SetIndividualBagPrinted(false);
                     UpdatePcMessage("Masukkan Plastic Bag ke Big Carton Box");
                     break;
                 case HmiState.ReadyAndWaitForNewReference:
@@ -478,6 +514,9 @@ namespace AutoBagBench
                 case HmiState.WaitingForProcessable:
                     UpdatePcMessage("Menunggu Processable output from previous machine ...");
                     break;
+                case HmiState.LoadingWorkOrder:
+                    UpdatePcMessage("Memuat Work Order Number baru ...");
+                    break;
                 default:
                     UpdatePcMessage("Status PC unknown!");
                     break;
@@ -489,8 +528,8 @@ namespace AutoBagBench
         }
         private void M221_RejectChanged(int data)
         {
-            if (!_reloading)
-            {
+            if (!_reloading && M221Plc.HmiState != HmiState.LoadingWorkOrder)
+            {              
                 _thisMechineProcess.SetRejectQuantity(data);
                 if (checkBox1.Checked) Xs156Client.SetRejectQuantity(data);
             }
@@ -517,12 +556,25 @@ namespace AutoBagBench
         {
             if (VerifyReferenceBarcode(reference))
             {
-                
-                _groupingBox = new GroupingBox(_thisMechineProcess.Product.GroupingSize)
+                if (_groupingBox.Reference != reference)
                 {
-                    ProcessGuid = _thisMechineProcess.ProcessGuid
-                };
-                ReAssignGroupingEvents();
+                    UnAssignGroupEvent();
+                    _groupingBox = new GroupingBox(_thisMechineProcess.Product.GroupingSize, reference)
+                    {
+                        ProcessGuid = _thisMechineProcess.ProcessGuid
+                    };
+                    ReAssignGroupingEvents();
+                }
+                else
+                {
+                    if (_groupingBox.ArticleNumber != _thisMechineProcess.OrderNumber)
+                    {
+                        _groupingBox.SavePrevious();
+                        _groupingBox.SetArticle(_thisMechineProcess.OrderNumber);
+                        
+                    }
+                    _groupingBox.Load(_thisMechineProcess.Product.GroupingSize, reference);
+                }
                 M221Plc.SetAccessories(_thisMechineProcess.Product.AccessoriesType);
                 M221Plc.SetHmiState(HmiState.ReadyAndWaitForNewReference);
             }
@@ -543,11 +595,23 @@ namespace AutoBagBench
                     {
                         if (VerifyReferenceBarcode(data))
                         {
-                            _groupingBox = new GroupingBox(_thisMechineProcess.Product.GroupingSize)
+                            if (_groupingBox.Reference != data)
                             {
-                                ProcessGuid = _thisMechineProcess.ProcessGuid
-                            };
-                            ReAssignGroupingEvents();
+                                UnAssignGroupEvent();
+                                _groupingBox = new GroupingBox(_thisMechineProcess.Product.GroupingSize, data)
+                                {
+                                    ProcessGuid = _thisMechineProcess.ProcessGuid
+                                };
+                                ReAssignGroupingEvents();
+                            }
+                            else
+                            {
+                                if (_groupingBox.ArticleNumber != _thisMechineProcess.OrderNumber) { 
+                                    _groupingBox.SavePrevious();
+                                    _groupingBox.SetArticle(_thisMechineProcess.OrderNumber);                              
+                                    }
+                                _groupingBox.Load(_thisMechineProcess.Product.GroupingSize, data);
+                            }
                             _thisMechineProcess.StartDateTime = DateTime.Now;
                             M221Plc.SetAccessories(_thisMechineProcess.Product.AccessoriesType);
                             M221Plc.SetHmiState(HmiState.NewReferenceReadyForProduction);
@@ -584,8 +648,7 @@ namespace AutoBagBench
                         _thisMechineProcess.Target = j;
                         _thisMechineProcess.StartDateTime = DateTime.Now;
                         M221Plc.SetHmiState(HmiState.NewReferenceReadyForProduction);
-                        M221Plc.SetRejectQuantity(0);
-                        M221Plc.SetOutputQuantity(0);
+                       
                         _thisMechineProcess.ProcessGuid = Guid.NewGuid();
                     }
                     else
@@ -686,8 +749,10 @@ namespace AutoBagBench
 
         private void timerClock_Tick(object sender, EventArgs e)
         {
+            timerClock.Stop();
             label2.Text = DateTime.Now.ToString("F");
             RefreshDisplay();
+            timerClock.Start();
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
@@ -708,12 +773,9 @@ namespace AutoBagBench
 
 
             if (result != DialogResult.Yes) return;
-            _groupingBox = new GroupingBox(0);
-            ReAssignGroupingEvents();
             _thisMechineProcess.CompleteProcess();
             M221Plc.ResetSequenceStart();
-            M221Plc.SetOutputQuantity(0);
-            M221Plc.SetRejectQuantity(0);
+          
             M221Plc.SetHmiState(HmiState.ReadyAndWaitForNewReference);
             ResetAllLabel();
             _thisMechineProcess =  null;
@@ -746,13 +808,13 @@ namespace AutoBagBench
             lbl_Accessories.Text = _thisMechineProcess.Product.AccessoriesType.ToString();
             lbl_GroupSize.Text = _groupingBox.GroupingSize.ToString("000");
             lbl_RemainingOfGroup.Text = _groupingBox.GroupRemainingQuantity.ToString("000");
+            lblPacked.Text = _groupingBox.ToString();
             labelFinishDateTime.Text = "";
             labelPass.Text = M221Plc.OutputQuantity.ToString("000");//_thisMechineProcess.OutputQuantity.ToString("000");
             labelStartDateTime4.Text = _thisMechineProcess.StartDateTime.ToString("s");
-            labelProcessable.Text = _thisMechineProcess.ProcessableQuantity.ToString("000");
+            labelProcessable.Text = label1Reference.Text== Empty ? "000" : _thisMechineProcess.ProcessableQuantity.ToString("000");
             lbl_Plasticbag.Text = _thisMechineProcess.Product.BagType.ToString();// _thisMechineProcess.Product.BagType.ToString();
-            labelReject.Text = _thisMechineProcess.RejectQuantity.ToString("000");
-            labelProcessable.Text = _thisMechineProcess.ProcessableQuantity.ToString("000");
+            labelReject.Text = M221Plc.RejectQuantity.ToString("000");//_thisMechineProcess.RejectQuantity.ToString("000");
             lbl_ArticleNumber.Text = _thisMechineProcess.Product.ArticleNumber;
             tb_ErrorAlarm.Visible = M221Plc.ErrorCode > 0;
             //btn_CloseReference.Visible = !string.IsNullOrWhiteSpace(_thisMechineProcess.Product.ReferenceName)&& !_thisMechineProcess.IsCompleted;
@@ -768,7 +830,7 @@ namespace AutoBagBench
 
         private void LoadTraceAbility(bool state)
         {
-           
+            
             if (state)
             {
                 checkBox1.Text = @"Traceability Active";
@@ -779,7 +841,10 @@ namespace AutoBagBench
                     Xs156Client.TrackingReferenceNewlyLoaded -= TrackingNewlyLoaded;
                     Xs156Client.TrackingDataBagUpdatedEvent -= TrackingDataUpdated;
                     Xs156Client.ExceptionEvent -= Xs156Exception;
+                    Xs156Client.NewReferenceTrackingEvent -= TrackingNewStartedByTester;
                 }
+                _reloading = true;
+                M221Plc.SetHmiState(HmiState.LoadingWorkOrder);
                 Xs156Client = new Xs156Client();
                 Xs156Client.TrackingDataBagUpdatedEvent += TrackingDataUpdated;
                 _trackingBagHandler = TrackingBagHandler;
@@ -787,6 +852,7 @@ namespace AutoBagBench
                 TrackingLoaded = NewTrackingLoaded;
                 Xs156Client.ExceptionEvent += Xs156Exception;
                 TrackingExceptionEvent = UpdatePcMessage;
+                Xs156Client.NewReferenceTrackingEvent += TrackingNewStartedByTester;
                 Xs156Client.StartUpdater();
             }
             else
@@ -794,11 +860,16 @@ namespace AutoBagBench
                 checkBox1.Text = @"Traceability Off";
                 checkBox1.BackColor = Color.ForestGreen;
 
-                if (Xs156Client == null) return;
-                M221Plc.SetHmiState(HmiState.ReadyAndWaitForNewReference);
-                Xs156Client.StopUpdater();
+                Xs156Client?.StopUpdater();
             }
         }
+
+        private void TrackingNewStartedByTester(string info)
+        {
+            MessageBox.Show(@"Tester Memulai Work Order Number Baru: " + info+@" !", @"Tester Load", MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+        }
+
         private void checkBox1_CheckStateChanged(object sender, EventArgs e)
         {
             var j = (CheckBox)sender;
@@ -870,7 +941,7 @@ namespace AutoBagBench
                 if (_individualPrint != null && !IsNullOrWhiteSpace(_thisMechineProcess.ReferenceName))
                 {
                     _individualPrint.ActiveReference = _thisMechineProcess.Product.ReferenceName;
-                    _individualPrint.LabelPath = "XS156.lab";
+                    _individualPrint.LabelPath = _thisMechineProcess.Product.LabelFile.Trim()+".lab";
                     _individualPrint.LoadCurrentLabel();
                     _individualPrint.ShowDialog();
                     if (_individualPrint.Printed)
@@ -903,6 +974,7 @@ namespace AutoBagBench
             try
             {
                 timerClock.Stop();
+                
                 if (BarcodeReader != null)
                 {
                     BarcodeReader.ClosePort();
@@ -923,7 +995,7 @@ namespace AutoBagBench
                 UpdatePcMessage("Reset Done");
                 if (M221Plc != null)
                 {
-                    if (_thisMechineProcess.Traceability&& !Xs156Client.IsBufferedMode())
+                    if (_thisMechineProcess.Traceability)
                     {
                         M221Plc.SetHmiState(HmiState.WaitingNewReferenceFromServer);
                         btn_ChangeReference.Visible = false;
@@ -947,14 +1019,26 @@ namespace AutoBagBench
         }
         private void button2_Click_1(object sender, EventArgs e)
         {
+            if (!AutoBagUser.LoggedIn)
+            {
+                btn_Login_Click(btn_Login, null);
+            }
+            if (!AutoBagUser.LoggedIn) return;
+
+            var j = MessageBox.Show(@"Apakah anda benar-benar ingin menutup semua order number?", @"Close Order Number",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (j == DialogResult.No) return;
             try
             {
-                timerClock.Stop();
-                LoadTraceAbility(checkBox1.Checked);
+                var con = $"Data Source={SettingHelper.DataBaseServer()};Initial Catalog=XS156TRAC;Persist Security Info=True;User ID=sa;Password=passwordsa;MultipleActiveResultSets=True;Max Pool Size=500";
+                SqlHelper.ExecuteNonQuery(con, CommandType.StoredProcedure,
+                    "usp_CloseAllOrderNumber");
+                MessageBox.Show(@"Successful");
             }
-            finally
+            catch
             {
-                timerClock.Start();
+                MessageBox.Show(@"Failed");
+                // ignored
             }
         }
         private void btn_Reference_Click(object sender, EventArgs e)
@@ -982,27 +1066,32 @@ namespace AutoBagBench
             var result = MessageBox.Show(@"Apakah anda ingin Mengganti Reference?", @"Change Reference",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            _groupingBox = new GroupingBox(0);
-            ReAssignGroupingEvents();
-
+           
             if (result == DialogResult.Yes)
             {
                
                 M221Plc.ResetSequenceStart();
-                M221Plc.SetOutputQuantity(0);
-                M221Plc.SetRejectQuantity(0);
                 M221Plc.SetHmiState(HmiState.ReadyAndWaitForNewReference);
                 ResetAllLabel();
                 _thisMechineProcess = null;
                 _thisMechineProcess = new Process() { EquipmentId = _equipment.Id };
                 docPreview.Image = new Bitmap(1, 1);
-                docPreviewGroup.Image = new Bitmap(1, 1);
-
-                
+                docPreviewGroup.Image = new Bitmap(1, 1);                
             }
         }
 
-
+        private void ShowButtons(bool show)
+        {
+            btn_Barcode.Visible = show;
+            btn_Setting.Visible = show;
+            btn_GroupPrint.Visible = show;
+            btn_IndividualPrint.Visible = show;
+            btn_PLC.Visible = show;
+            btn_Reference.Visible = show;
+            btn_Setting.Visible = show;
+            btnAdjust.Visible = show;
+            btnProcessableAdjust.Visible = show;
+        }
         private void btn_Login_Click(object sender, EventArgs e)
         {
             if (btn_Login.Text == @"LOG IN")
@@ -1018,18 +1107,16 @@ namespace AutoBagBench
                             {
                                 btn_Login.Text = @"LOG OFF";
                                 btn_ChangePassword.Visible = true;
+                                M221Plc?.SetMaintenanceMode();
+                                ShowButtons(true);
                             }
                             else
                             {
-                                MessageBox.Show(@"Log in", @"Password Salah!!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                MessageBox.Show( @"Password Salah!", @"Log in", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                         }
                     }
-                }
-                
-            
-
-           
+                }          
             }
             else
             {
@@ -1037,6 +1124,12 @@ namespace AutoBagBench
                 {
                     AutoBagUser.LogOff();
                     btn_ChangePassword.Visible = false;
+                    ShowButtons(false);
+                    if (M221Plc.MaintenanceMode)
+                    {
+                        M221Plc?.ResetMaintenanceMode();
+                        btnMaintenance.Text = @"PROD MODE";
+                    }
                 }
                 btn_Login.Text = @"LOG IN";
             }
@@ -1071,35 +1164,148 @@ namespace AutoBagBench
         {
             using (var frm = new OpenProcessList())
             {
-                Xs156Client.GetOpenProcess();
+                if (Xs156Client != null)
+                {
+                    MessageBox.Show("Error Loading Open Order Number.\r\nTraceability Inactive atau Silahkan tekan Reset");
+                }
+                Xs156Client?.GetOpenProcess();
                 int i;
-                for (i = 0; i < Xs156Client.GetOpenProcessCount(); i++)
+                try
                 {
-                    frm.dgvList.Rows.Add(new object[]
-                        {
-                            Xs156Client.CurrentOpenProcess().OrderNumber,
-                            Xs156Client.CurrentOpenProcess().CurrentReferenceName,
-                            Xs156Client.CurrentOpenProcess().StartDateTime
-                        }
-                    );
-                
-                Xs156Client.OpenProcessNext();
-            }
+                    for (i = 0; i < Xs156Client?.GetOpenProcessCount(); i++)
+                    {
+                        Xs156Client.CurrentOpenProcess();
+                        frm.dgvList.Rows.Add(Xs156Client.CurrentOpenProcessOrderNumber(),
+                            Xs156Client.CurrentOpenProcessReference(), Xs156Client.CurrentOpenProcessStartDate());
+                        Xs156Client.OpenProcessNext();
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Error Loading Open Order Number.\r\nTraceability Inactive atau Silahkan tekan Reset");
+                }
 
-            frm.ShowDialog();
-            var ask = MessageBox.Show(@"Yakin load order number " + frm.SelectedOrderNumber +@" ?", @"Traceability", MessageBoxButtons.OKCancel,MessageBoxIcon.Question);
-               
-                if (frm.LoadNew && ask == DialogResult.OK)
+            }
+        }
+
+        private void chb_AutoManual_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void chb_AutoManual_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chb_AutoManual.CheckState == CheckState.Unchecked)
+            {
+                chb_AutoManual.Text = "AUTO";
+                _manual = false;
+            }
+            else
+            {
+                if (!AutoBagUser.LoggedIn)
                 {
-                    try
-                    {
-                        Xs156Client.LoadByOrderNumber(frm.SelectedOrderNumber);
-                    }
-                    catch (Exception exception)
-                    {
-                        MessageBox.Show(exception.Message, @"Traceability");
-                        UpdatePlcMessage("Failed To load Process!");
-                    }
+                    btn_Login_Click(btn_Login, null);
+                }
+                if (!AutoBagUser.LoggedIn)
+                {
+                    chb_AutoManual.Checked = false;
+                    return;
+                }
+                chb_AutoManual.Text = @"MANUAL";
+                _manual = true;
+                if (M221Plc.HmiState == HmiState.WaitingForProcessable)
+                {
+                    M221Plc.SetHmiState(HmiState.WaitingForAccessories);
+                }
+            }
+        }
+
+        private void btnMaintenance_Click(object sender, EventArgs e)
+        {
+            if (!AutoBagUser.LoggedIn)
+            {
+                btn_Login_Click(btn_Login, null);
+            }
+            if (!AutoBagUser.LoggedIn) return;
+            if (M221Plc.MaintenanceMode)
+            {
+                M221Plc.ResetMaintenanceMode();
+                btnMaintenance.Text = @"PROD MODE";
+            }
+            else
+            {
+                M221Plc.SetMaintenanceMode();
+                btnMaintenance.Text = @"MAINT MODE";
+            }
+        }
+
+        private void label21_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnAdjust_Click(object sender, EventArgs e)
+        {
+            using (var adj = new Adjust())
+            {
+                adj.ShowDialog();
+                var j = adj.AdjustmentQty;
+                int k;
+                if (adj.ActionToTake == AdjusmentMode.Kurangi)
+                {
+                    k = M221Plc.OutputQuantity - j;
+                    if (k < 0) k = 0;
+                    M221Plc.SetOutputQuantity(k);
+                }
+                if (adj.ActionToTake == AdjusmentMode.Tambah)
+                {
+                    k = M221Plc.OutputQuantity + j;
+                    //if (k > _thisMechineProcess.ProcessableQuantity) k = _thisMechineProcess.ProcessableQuantity;
+                    M221Plc.SetOutputQuantity(k);
+                }
+            }
+        }
+
+        private void AdjustProcessable(int qty)
+        {
+            Xs156Setting = new Xs156Setting();
+            var param = new[]
+            {
+                new SqlParameter("@Reference", SqlDbType.NVarChar,255) {Value = Xs156Client.GetProcessIdentity()},
+                new SqlParameter("@EquipmentId", SqlDbType.NVarChar,255){Value = Xs156Setting.EquipmentIdentity()},
+                new SqlParameter("@Adjustment", SqlDbType.BigInt){Value = qty},
+            };
+           
+
+            try
+            {
+                SqlHelper.ExecuteNonQuery(SettingHelper.GetDatabaseConnection(), CommandType.StoredProcedure, "usp_UpdateProcessableQuantity", param);
+                MessageBox.Show(@"Successful!");
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(@"Failed!");
+            }
+           
+        }
+
+        private void btnProcessableAdjust_Click(object sender, EventArgs e)
+        {
+            using (var dlg = new Adjust())
+            {
+                dlg.ShowDialog();
+                switch (dlg.ActionToTake)
+                {
+                    case AdjusmentMode.None:
+                        break;
+                    case AdjusmentMode.Kurangi:
+                        AdjustProcessable(-dlg.AdjustmentQty);
+                        break;
+                    case AdjusmentMode.Tambah:
+                        AdjustProcessable(dlg.AdjustmentQty);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
         }

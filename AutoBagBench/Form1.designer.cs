@@ -39,6 +39,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.panel27 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
+            this.chb_AutoManual = new System.Windows.Forms.CheckBox();
             this.panel4 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.panel32 = new System.Windows.Forms.Panel();
@@ -78,6 +79,7 @@
             this.panel23 = new System.Windows.Forms.Panel();
             this.labelFinishDateTime = new System.Windows.Forms.Label();
             this.panel16 = new System.Windows.Forms.Panel();
+            this.btnProcessableAdjust = new System.Windows.Forms.Button();
             this.labelProcessable = new System.Windows.Forms.Label();
             this.panel24 = new System.Windows.Forms.Panel();
             this.label15 = new System.Windows.Forms.Label();
@@ -127,6 +129,10 @@
             this.label11 = new System.Windows.Forms.Label();
             this.panel31 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
+            this.panel65 = new System.Windows.Forms.Panel();
+            this.lblPacked = new System.Windows.Forms.Label();
+            this.panel64 = new System.Windows.Forms.Panel();
+            this.label6 = new System.Windows.Forms.Label();
             this.panel40 = new System.Windows.Forms.Panel();
             this.label14 = new System.Windows.Forms.Label();
             this.panel41 = new System.Windows.Forms.Panel();
@@ -147,6 +153,7 @@
             this.panel45 = new System.Windows.Forms.Panel();
             this.label20 = new System.Windows.Forms.Label();
             this.panel47 = new System.Windows.Forms.Panel();
+            this.btnAdjust = new System.Windows.Forms.Button();
             this.labelPass = new System.Windows.Forms.Label();
             this.panel48 = new System.Windows.Forms.Panel();
             this.labelReject = new System.Windows.Forms.Label();
@@ -159,6 +166,7 @@
             this.btn_GroupPrint = new System.Windows.Forms.Button();
             this.panel60 = new System.Windows.Forms.Panel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnMaintenance = new System.Windows.Forms.Button();
             this.btn_PLC = new System.Windows.Forms.Button();
             this.btn_Reference = new System.Windows.Forms.Button();
             this.btn_Barcode = new System.Windows.Forms.Button();
@@ -236,6 +244,8 @@
             this.panel30.SuspendLayout();
             this.panel31.SuspendLayout();
             this.tableLayoutPanel8.SuspendLayout();
+            this.panel65.SuspendLayout();
+            this.panel64.SuspendLayout();
             this.panel40.SuspendLayout();
             this.panel41.SuspendLayout();
             this.panel42.SuspendLayout();
@@ -351,6 +361,7 @@
             // panel27
             // 
             this.panel27.Controls.Add(this.label2);
+            this.panel27.Controls.Add(this.chb_AutoManual);
             this.panel27.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel27.Location = new System.Drawing.Point(936, 3);
             this.panel27.Name = "panel27";
@@ -366,6 +377,21 @@
             this.label2.Size = new System.Drawing.Size(51, 20);
             this.label2.TabIndex = 1;
             this.label2.Text = "label2";
+            // 
+            // chb_AutoManual
+            // 
+            this.chb_AutoManual.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chb_AutoManual.AutoSize = true;
+            this.chb_AutoManual.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chb_AutoManual.Location = new System.Drawing.Point(364, 11);
+            this.chb_AutoManual.Name = "chb_AutoManual";
+            this.chb_AutoManual.Size = new System.Drawing.Size(73, 34);
+            this.chb_AutoManual.TabIndex = 1;
+            this.chb_AutoManual.Text = "AUTO";
+            this.chb_AutoManual.UseVisualStyleBackColor = true;
+            this.chb_AutoManual.Visible = false;
+            this.chb_AutoManual.CheckedChanged += new System.EventHandler(this.chb_AutoManual_CheckedChanged);
+            this.chb_AutoManual.Click += new System.EventHandler(this.chb_AutoManual_Click);
             // 
             // panel4
             // 
@@ -794,12 +820,26 @@
             // 
             // panel16
             // 
+            this.panel16.Controls.Add(this.btnProcessableAdjust);
             this.panel16.Controls.Add(this.labelProcessable);
             this.panel16.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel16.Location = new System.Drawing.Point(177, 266);
             this.panel16.Name = "panel16";
             this.panel16.Size = new System.Drawing.Size(305, 52);
             this.panel16.TabIndex = 13;
+            // 
+            // btnProcessableAdjust
+            // 
+            this.btnProcessableAdjust.BackColor = System.Drawing.Color.Lavender;
+            this.btnProcessableAdjust.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnProcessableAdjust.Location = new System.Drawing.Point(259, 16);
+            this.btnProcessableAdjust.Name = "btnProcessableAdjust";
+            this.btnProcessableAdjust.Size = new System.Drawing.Size(42, 22);
+            this.btnProcessableAdjust.TabIndex = 9;
+            this.btnProcessableAdjust.Text = "ADJ";
+            this.btnProcessableAdjust.UseVisualStyleBackColor = false;
+            this.btnProcessableAdjust.Visible = false;
+            this.btnProcessableAdjust.Click += new System.EventHandler(this.btnProcessableAdjust_Click);
             // 
             // labelProcessable
             // 
@@ -981,6 +1021,7 @@
             this.label23.Size = new System.Drawing.Size(59, 13);
             this.label23.TabIndex = 0;
             this.label23.Text = "Line Group";
+            this.label23.Visible = false;
             // 
             // panel56
             // 
@@ -1000,6 +1041,7 @@
             this.lbl_LineGroup.Size = new System.Drawing.Size(59, 13);
             this.lbl_LineGroup.TabIndex = 0;
             this.lbl_LineGroup.Text = "Line Group";
+            this.lbl_LineGroup.Visible = false;
             // 
             // panel49
             // 
@@ -1091,6 +1133,8 @@
             this.label21.Size = new System.Drawing.Size(69, 13);
             this.label21.TabIndex = 0;
             this.label21.Text = "Equipment Id";
+            this.label21.Visible = false;
+            this.label21.Click += new System.EventHandler(this.label21_Click);
             // 
             // panel54
             // 
@@ -1110,6 +1154,7 @@
             this.lbl_EquipmentId.Size = new System.Drawing.Size(69, 13);
             this.lbl_EquipmentId.TabIndex = 0;
             this.lbl_EquipmentId.Text = "Equipment Id";
+            this.lbl_EquipmentId.Visible = false;
             // 
             // tableLayoutPanel14
             // 
@@ -1144,6 +1189,7 @@
             this.label22.Size = new System.Drawing.Size(57, 13);
             this.label22.TabIndex = 0;
             this.label22.Text = "Process Id";
+            this.label22.Visible = false;
             // 
             // panel52
             // 
@@ -1163,6 +1209,7 @@
             this.lbl_ProcessId.Size = new System.Drawing.Size(57, 13);
             this.lbl_ProcessId.TabIndex = 0;
             this.lbl_ProcessId.Text = "Process Id";
+            this.lbl_ProcessId.Visible = false;
             // 
             // tableLayoutPanel16
             // 
@@ -1197,6 +1244,7 @@
             this.label25.Size = new System.Drawing.Size(57, 13);
             this.label25.TabIndex = 0;
             this.label25.Text = "Reference";
+            this.label25.Visible = false;
             // 
             // panel58
             // 
@@ -1216,6 +1264,7 @@
             this.lbl_ReferenceTraceability.Size = new System.Drawing.Size(57, 13);
             this.lbl_ReferenceTraceability.TabIndex = 0;
             this.lbl_ReferenceTraceability.Text = "Reference";
+            this.lbl_ReferenceTraceability.Visible = false;
             // 
             // panel10
             // 
@@ -1348,9 +1397,12 @@
             // tableLayoutPanel8
             // 
             this.tableLayoutPanel8.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
-            this.tableLayoutPanel8.ColumnCount = 2;
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel8.ColumnCount = 3;
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 48.16327F));
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 51.83673F));
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
+            this.tableLayoutPanel8.Controls.Add(this.panel65, 2, 1);
+            this.tableLayoutPanel8.Controls.Add(this.panel64, 2, 0);
             this.tableLayoutPanel8.Controls.Add(this.panel40, 0, 0);
             this.tableLayoutPanel8.Controls.Add(this.panel41, 1, 0);
             this.tableLayoutPanel8.Controls.Add(this.panel42, 0, 1);
@@ -1364,6 +1416,52 @@
             this.tableLayoutPanel8.Size = new System.Drawing.Size(388, 149);
             this.tableLayoutPanel8.TabIndex = 0;
             // 
+            // panel65
+            // 
+            this.panel65.BackColor = System.Drawing.Color.White;
+            this.panel65.Controls.Add(this.lblPacked);
+            this.panel65.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel65.ForeColor = System.Drawing.Color.Black;
+            this.panel65.Location = new System.Drawing.Point(229, 54);
+            this.panel65.Name = "panel65";
+            this.panel65.Size = new System.Drawing.Size(155, 91);
+            this.panel65.TabIndex = 5;
+            // 
+            // lblPacked
+            // 
+            this.lblPacked.AutoSize = true;
+            this.lblPacked.Font = new System.Drawing.Font("Microsoft Sans Serif", 40F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPacked.ForeColor = System.Drawing.Color.Black;
+            this.lblPacked.Location = new System.Drawing.Point(17, 11);
+            this.lblPacked.Name = "lblPacked";
+            this.lblPacked.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.lblPacked.Size = new System.Drawing.Size(120, 63);
+            this.lblPacked.TabIndex = 0;
+            this.lblPacked.Text = "000";
+            this.lblPacked.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // panel64
+            // 
+            this.panel64.BackColor = System.Drawing.Color.White;
+            this.panel64.Controls.Add(this.label6);
+            this.panel64.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel64.ForeColor = System.Drawing.Color.Black;
+            this.panel64.Location = new System.Drawing.Point(229, 4);
+            this.panel64.Name = "panel64";
+            this.panel64.Size = new System.Drawing.Size(155, 43);
+            this.panel64.TabIndex = 4;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.Color.Black;
+            this.label6.Location = new System.Drawing.Point(42, 11);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(68, 16);
+            this.label6.TabIndex = 0;
+            this.label6.Text = "PACKED";
+            // 
             // panel40
             // 
             this.panel40.BackColor = System.Drawing.Color.White;
@@ -1372,17 +1470,17 @@
             this.panel40.ForeColor = System.Drawing.Color.Black;
             this.panel40.Location = new System.Drawing.Point(4, 4);
             this.panel40.Name = "panel40";
-            this.panel40.Size = new System.Drawing.Size(186, 43);
+            this.panel40.Size = new System.Drawing.Size(101, 43);
             this.panel40.TabIndex = 0;
             // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.ForeColor = System.Drawing.Color.Black;
-            this.label14.Location = new System.Drawing.Point(22, 13);
+            this.label14.Location = new System.Drawing.Point(7, 11);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(133, 24);
+            this.label14.Size = new System.Drawing.Size(99, 16);
             this.label14.TabIndex = 0;
             this.label14.Text = "GROUP SIZE";
             // 
@@ -1392,19 +1490,19 @@
             this.panel41.Controls.Add(this.label16);
             this.panel41.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel41.ForeColor = System.Drawing.Color.Black;
-            this.panel41.Location = new System.Drawing.Point(197, 4);
+            this.panel41.Location = new System.Drawing.Point(112, 4);
             this.panel41.Name = "panel41";
-            this.panel41.Size = new System.Drawing.Size(187, 43);
+            this.panel41.Size = new System.Drawing.Size(110, 43);
             this.panel41.TabIndex = 1;
             // 
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label16.ForeColor = System.Drawing.Color.Black;
-            this.label16.Location = new System.Drawing.Point(26, 13);
+            this.label16.Location = new System.Drawing.Point(12, 11);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(124, 24);
+            this.label16.Size = new System.Drawing.Size(92, 16);
             this.label16.TabIndex = 0;
             this.label16.Text = "REMAINING";
             // 
@@ -1416,7 +1514,7 @@
             this.panel42.ForeColor = System.Drawing.Color.Black;
             this.panel42.Location = new System.Drawing.Point(4, 54);
             this.panel42.Name = "panel42";
-            this.panel42.Size = new System.Drawing.Size(186, 91);
+            this.panel42.Size = new System.Drawing.Size(101, 91);
             this.panel42.TabIndex = 2;
             // 
             // lbl_GroupSize
@@ -1424,7 +1522,7 @@
             this.lbl_GroupSize.AutoSize = true;
             this.lbl_GroupSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 40F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_GroupSize.ForeColor = System.Drawing.Color.Black;
-            this.lbl_GroupSize.Location = new System.Drawing.Point(34, 11);
+            this.lbl_GroupSize.Location = new System.Drawing.Point(-5, 11);
             this.lbl_GroupSize.Name = "lbl_GroupSize";
             this.lbl_GroupSize.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lbl_GroupSize.Size = new System.Drawing.Size(120, 63);
@@ -1438,9 +1536,9 @@
             this.panel43.Controls.Add(this.lbl_RemainingOfGroup);
             this.panel43.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel43.ForeColor = System.Drawing.Color.Black;
-            this.panel43.Location = new System.Drawing.Point(197, 54);
+            this.panel43.Location = new System.Drawing.Point(112, 54);
             this.panel43.Name = "panel43";
-            this.panel43.Size = new System.Drawing.Size(187, 91);
+            this.panel43.Size = new System.Drawing.Size(110, 91);
             this.panel43.TabIndex = 3;
             // 
             // lbl_RemainingOfGroup
@@ -1448,7 +1546,7 @@
             this.lbl_RemainingOfGroup.AutoSize = true;
             this.lbl_RemainingOfGroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 40F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_RemainingOfGroup.ForeColor = System.Drawing.Color.Black;
-            this.lbl_RemainingOfGroup.Location = new System.Drawing.Point(26, 11);
+            this.lbl_RemainingOfGroup.Location = new System.Drawing.Point(3, 10);
             this.lbl_RemainingOfGroup.Name = "lbl_RemainingOfGroup";
             this.lbl_RemainingOfGroup.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lbl_RemainingOfGroup.Size = new System.Drawing.Size(120, 63);
@@ -1590,6 +1688,7 @@
             // panel47
             // 
             this.panel47.BackColor = System.Drawing.Color.White;
+            this.panel47.Controls.Add(this.btnAdjust);
             this.panel47.Controls.Add(this.labelPass);
             this.panel47.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel47.ForeColor = System.Drawing.Color.Black;
@@ -1597,6 +1696,19 @@
             this.panel47.Name = "panel47";
             this.panel47.Size = new System.Drawing.Size(186, 91);
             this.panel47.TabIndex = 2;
+            // 
+            // btnAdjust
+            // 
+            this.btnAdjust.BackColor = System.Drawing.Color.Lavender;
+            this.btnAdjust.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAdjust.Location = new System.Drawing.Point(141, 66);
+            this.btnAdjust.Name = "btnAdjust";
+            this.btnAdjust.Size = new System.Drawing.Size(42, 22);
+            this.btnAdjust.TabIndex = 8;
+            this.btnAdjust.Text = "ADJ";
+            this.btnAdjust.UseVisualStyleBackColor = false;
+            this.btnAdjust.Visible = false;
+            this.btnAdjust.Click += new System.EventHandler(this.btnAdjust_Click);
             // 
             // labelPass
             // 
@@ -1668,9 +1780,9 @@
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button2.Location = new System.Drawing.Point(270, 12);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(101, 45);
+            this.button2.Size = new System.Drawing.Size(117, 45);
             this.button2.TabIndex = 6;
-            this.button2.Text = "REFRESH TRACEABILITY";
+            this.button2.Text = "CLOSE ALL ORDERNUMBER";
             this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click_1);
             // 
@@ -1696,6 +1808,7 @@
             this.btn_IndividualPrint.TabIndex = 6;
             this.btn_IndividualPrint.Text = "INDIVIDUAL PRINT";
             this.btn_IndividualPrint.UseVisualStyleBackColor = false;
+            this.btn_IndividualPrint.Visible = false;
             this.btn_IndividualPrint.Click += new System.EventHandler(this.btn_IndividualPrint_Click);
             // 
             // btn_GroupPrint
@@ -1708,6 +1821,7 @@
             this.btn_GroupPrint.TabIndex = 5;
             this.btn_GroupPrint.Text = "GROUP PRINT";
             this.btn_GroupPrint.UseVisualStyleBackColor = false;
+            this.btn_GroupPrint.Visible = false;
             this.btn_GroupPrint.Click += new System.EventHandler(this.btn_GroupPrint_Click);
             // 
             // panel60
@@ -1721,6 +1835,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.btnMaintenance);
             this.groupBox2.Controls.Add(this.btn_PLC);
             this.groupBox2.Controls.Add(this.btn_Reference);
             this.groupBox2.Controls.Add(this.btn_Barcode);
@@ -1732,52 +1847,69 @@
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             // 
+            // btnMaintenance
+            // 
+            this.btnMaintenance.BackColor = System.Drawing.Color.Lavender;
+            this.btnMaintenance.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMaintenance.Location = new System.Drawing.Point(295, 13);
+            this.btnMaintenance.Name = "btnMaintenance";
+            this.btnMaintenance.Size = new System.Drawing.Size(85, 45);
+            this.btnMaintenance.TabIndex = 8;
+            this.btnMaintenance.Text = "MAINT MODE";
+            this.btnMaintenance.UseVisualStyleBackColor = false;
+            this.btnMaintenance.Visible = false;
+            this.btnMaintenance.Click += new System.EventHandler(this.btnMaintenance_Click);
+            // 
             // btn_PLC
             // 
             this.btn_PLC.BackColor = System.Drawing.Color.Lavender;
             this.btn_PLC.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_PLC.Location = new System.Drawing.Point(92, 13);
+            this.btn_PLC.Location = new System.Drawing.Point(79, 13);
             this.btn_PLC.Name = "btn_PLC";
-            this.btn_PLC.Size = new System.Drawing.Size(66, 45);
+            this.btn_PLC.Size = new System.Drawing.Size(49, 45);
             this.btn_PLC.TabIndex = 7;
             this.btn_PLC.Text = "PLC";
             this.btn_PLC.UseVisualStyleBackColor = false;
+            this.btn_PLC.Visible = false;
             this.btn_PLC.Click += new System.EventHandler(this.btn_PLC_Click);
             // 
             // btn_Reference
             // 
             this.btn_Reference.BackColor = System.Drawing.Color.Lavender;
             this.btn_Reference.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Reference.Location = new System.Drawing.Point(273, 13);
+            this.btn_Reference.Location = new System.Drawing.Point(207, 13);
             this.btn_Reference.Name = "btn_Reference";
-            this.btn_Reference.Size = new System.Drawing.Size(103, 45);
+            this.btn_Reference.Size = new System.Drawing.Size(85, 45);
             this.btn_Reference.TabIndex = 7;
             this.btn_Reference.Text = "PRODUCT REFERENCE";
             this.btn_Reference.UseVisualStyleBackColor = false;
+            this.btn_Reference.Visible = false;
             this.btn_Reference.Click += new System.EventHandler(this.btn_Reference_Click);
             // 
             // btn_Barcode
             // 
             this.btn_Barcode.BackColor = System.Drawing.Color.Lavender;
             this.btn_Barcode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Barcode.Location = new System.Drawing.Point(164, 13);
+            this.btn_Barcode.Location = new System.Drawing.Point(131, 13);
             this.btn_Barcode.Name = "btn_Barcode";
-            this.btn_Barcode.Size = new System.Drawing.Size(103, 45);
+            this.btn_Barcode.Size = new System.Drawing.Size(73, 45);
             this.btn_Barcode.TabIndex = 7;
             this.btn_Barcode.Text = "BARCODE READER";
             this.btn_Barcode.UseVisualStyleBackColor = false;
+            this.btn_Barcode.Visible = false;
             this.btn_Barcode.Click += new System.EventHandler(this.btn_Barcode_Click);
             // 
             // btn_Setting
             // 
             this.btn_Setting.BackColor = System.Drawing.Color.Lavender;
             this.btn_Setting.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_Setting.Location = new System.Drawing.Point(15, 13);
+            this.btn_Setting.Location = new System.Drawing.Point(6, 13);
             this.btn_Setting.Name = "btn_Setting";
             this.btn_Setting.Size = new System.Drawing.Size(71, 45);
             this.btn_Setting.TabIndex = 7;
             this.btn_Setting.Text = "SETTING";
             this.btn_Setting.UseVisualStyleBackColor = false;
+            this.btn_Setting.Visible = false;
             this.btn_Setting.Click += new System.EventHandler(this.button2_Click);
             // 
             // panel46
@@ -2026,6 +2158,10 @@
             this.panel30.PerformLayout();
             this.panel31.ResumeLayout(false);
             this.tableLayoutPanel8.ResumeLayout(false);
+            this.panel65.ResumeLayout(false);
+            this.panel65.PerformLayout();
+            this.panel64.ResumeLayout(false);
+            this.panel64.PerformLayout();
             this.panel40.ResumeLayout(false);
             this.panel40.PerformLayout();
             this.panel41.ResumeLayout(false);
@@ -2216,6 +2352,14 @@
         private System.Windows.Forms.Button btn_Login;
         private System.Windows.Forms.Button btn_ChangePassword;
         private System.Windows.Forms.Button btnLoadOrderNumber;
+        private System.Windows.Forms.CheckBox chb_AutoManual;
+        private System.Windows.Forms.Panel panel65;
+        private System.Windows.Forms.Label lblPacked;
+        private System.Windows.Forms.Panel panel64;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button btnMaintenance;
+        private System.Windows.Forms.Button btnAdjust;
+        private System.Windows.Forms.Button btnProcessableAdjust;
     }
 }
 

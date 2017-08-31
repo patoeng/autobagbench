@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ModbusTCP;
 
@@ -30,9 +24,9 @@ namespace AutoBagBench
                 tm_Updater.Interval = SettingHelper.PlcReadInterval();
                 ConnectToPlc();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                
+                //
             }
 
         }
@@ -75,6 +69,8 @@ namespace AutoBagBench
         public bool AccessoriesBoxM18GateOpen { get; protected set; }//MW22:X8
         public bool AccessoriesBoxM30GateOpen { get; protected set; }//MW22:X9
         public bool IndividualBagLabelPrint { get; protected set; }//
+
+        public bool MaintenanceMode { get; protected set; }
         public HmiState HmiState { get; protected set; }
         public PlcMode PlcMode { get; protected set; }
         public int ErrorCode { get; protected set; }
@@ -84,14 +80,22 @@ namespace AutoBagBench
         private int[] _data;
         private void tm_Updater_Tick(object sender, EventArgs e)
         {
+
             try
             {
-                byte[] temp = new byte[] {};
+                byte[] temp = {};
                 tm_Updater.Stop();
                 PlcCommandHelper.GetPlcRawData(_master, 25,ref temp);
                 _data = ModbusTcpHelper.ByteArrayToWordArray(temp);
                 MemoryMapping(_data);
-                if (DataUpdated != null) DataUpdated();
+                try
+                {
+                    DataUpdated?.Invoke();
+                }
+                catch
+                {
+                    // ignored
+                }
             }
             finally 
             {
@@ -107,7 +111,14 @@ namespace AutoBagBench
             OutputQuantity = data;
             if (_output != data)
             {
-                if (PlcOutputChanged != null) PlcOutputChanged(data);
+                try
+                {
+                    PlcOutputChanged?.Invoke(data);
+                }
+                catch
+                {
+                    //
+                }
                 _output = data;
             }
         }
@@ -117,7 +128,14 @@ namespace AutoBagBench
             RejectQuantity = data;
             if (_reject != data)
             {
-                if (PlcRejectChanged != null) PlcRejectChanged(data);
+                try
+                {
+                    PlcRejectChanged?.Invoke(data);
+                }
+                catch
+                {
+                    //
+                }
                 _reject = data;
             }
         }
@@ -132,7 +150,14 @@ namespace AutoBagBench
                     Code = data + 1000,
                     Message = PlcErrorMessage.Message(data)
                 };
-                if (PlcErrorEvent != null) PlcErrorEvent(j);
+                try
+                {
+                    PlcErrorEvent?.Invoke(j);
+                }
+                catch
+                {
+                    //
+                }
                 _error = data;
             }
 
@@ -141,7 +166,14 @@ namespace AutoBagBench
         {
             if (HmiState != data)
             {
-                if (HmiStateChanged != null) HmiStateChanged((int)data);
+                try
+                {
+                    HmiStateChanged?.Invoke((int) data);
+                }
+                catch
+                {
+                    //
+                }
             }
             HmiState = data;
         }
@@ -155,6 +187,7 @@ namespace AutoBagBench
             PlcMode = (PlcMode) data[2];
             InputMapping(data[20], data[21]);
             OutputMapping(data[23]);
+
         }
 
         private void InputMapping(int data,int data2)
@@ -179,8 +212,9 @@ namespace AutoBagBench
             AccessoriesM30DoorCloseSensor = (data >> 15 & 0x01) == 0x01;
 
             FingerSwitchLeft = (data2 & 0x01) == 0x01;
-            FingerSwitchRight= (data2>>1 & 0x01) == 0x01;
-         
+            FingerSwitchRight= (data2 >> 1 & 0x01) == 0x01;
+            MaintenanceMode = (data2 >> 2 & 0x01) == 0x01;
+
         }
 
         private void OutputMapping(int data)
@@ -308,7 +342,7 @@ namespace AutoBagBench
                 tm_Updater.Start();
                 return true;
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 return false;
             }
@@ -428,6 +462,22 @@ namespace AutoBagBench
         public void SetIndividualBagPrinted(bool value)
         {
             PlcCommandHelper.IndividualBagPrinted(_master,value);
+        }
+
+        public void SetMaintenanceMode()
+        {
+            PlcCommandHelper.SetMaintenanceMode(_master,true);
+        }
+
+        public void ResetMaintenanceMode()
+        {
+            PlcCommandHelper.SetMaintenanceMode(_master, false);
+        }
+
+        private void tm_PlcUpdated_Tick(object sender, EventArgs e)
+        {
+            tm_PlcUpdated.Stop();
+           
         }
     }
 }

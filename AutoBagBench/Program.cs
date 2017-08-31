@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AutoBagBench
@@ -29,6 +27,7 @@ namespace AutoBagBench
        }
     }
 
-        private const string AppGuid = "464745B4-9C2A-4B59-A097-8155F0480CAD";
+        private const string AppGuid = "C33AC1EF-D075-461C-8EDA-13C093E5E701";
+
     }
 }

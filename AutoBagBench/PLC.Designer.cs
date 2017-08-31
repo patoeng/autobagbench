@@ -104,6 +104,7 @@
             this.tm_DisplayUpdater = new System.Windows.Forms.Timer(this.components);
             this.label8 = new System.Windows.Forms.Label();
             this.btn_AutoManual = new System.Windows.Forms.Button();
+            this.tm_PlcUpdated = new System.Windows.Forms.Timer(this.components);
             this.gb_Input.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -995,6 +996,11 @@
             this.btn_AutoManual.UseVisualStyleBackColor = true;
             this.btn_AutoManual.Click += new System.EventHandler(this.btn_AutoManual_Click);
             // 
+            // tm_PlcUpdated
+            // 
+            this.tm_PlcUpdated.Interval = 10;
+            this.tm_PlcUpdated.Tick += new System.EventHandler(this.tm_PlcUpdated_Tick);
+            // 
             // Plc
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1097,5 +1103,6 @@
         private System.Windows.Forms.Timer tm_DisplayUpdater;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button btn_AutoManual;
+        private System.Windows.Forms.Timer tm_PlcUpdated;
     }
 }

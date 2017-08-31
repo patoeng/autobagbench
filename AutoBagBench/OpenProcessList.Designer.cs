@@ -45,6 +45,7 @@
             this.btnLoadOrderNumber.TabIndex = 1;
             this.btnLoadOrderNumber.Text = "Load Order Number";
             this.btnLoadOrderNumber.UseVisualStyleBackColor = true;
+            this.btnLoadOrderNumber.Visible = false;
             this.btnLoadOrderNumber.Click += new System.EventHandler(this.btnLoadOrderNumber_Click);
             // 
             // btnClose

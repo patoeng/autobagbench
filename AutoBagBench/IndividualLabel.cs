@@ -64,10 +64,17 @@ namespace AutoBagBench
         }
         private void IndividualLabel_Load(object sender, EventArgs e)
         {
-            _picDefW = docPreview.Width;
-            _picDefH = docPreview.Height;
-            var j = LabelFullPath();
-            docPreview.Image = LoadLabel(j);
+            try
+            {
+                _picDefW = docPreview.Width;
+                _picDefH = docPreview.Height;
+                var j = LabelFullPath();
+                docPreview.Image = LoadLabel(j);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(LabelFullPath() + "\r\n"+ ex);
+            }
             lbl_Path.Text = SettingHelper.LabelIndividualPath() + @"\" + LabelPath;
             lbl_Printer.Text = SettingHelper.LabelIndividualPrinter();
 
@@ -93,7 +100,9 @@ namespace AutoBagBench
             }
             catch (Exception ex)
             {
-                MessageBox.Show(@"Load Individual Label " + ex.Message);
+                MessageBox.Show(@"Load Individual Label : " + ex.StackTrace+ "\r\n"+path+"]\r\n" + SettingHelper.LabelIndividualImagePath() + @"\" +
+                                                                         _referenceFamily + @"\" + _activeReference +
+                                                                         ".jpg");
             }
             return NoDocOpened ? new Bitmap(1, 1) : DisplayPreview();
         }

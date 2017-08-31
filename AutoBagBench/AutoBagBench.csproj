@@ -15,7 +15,7 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -46,11 +46,18 @@
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
     </Reference>
+    <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
+      <HintPath>..\packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Interop.LabelManager2, Version=11.0.0.0, Culture=neutral, PublicKeyToken=1904804c83c4f22a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>False</EmbedInteropTypes>
       <HintPath>C:\Windows\assembly\GAC_MSIL\Interop.LabelManager2\11.0.0.0__1904804c83c4f22a\Interop.LabelManager2.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationBlocks.Data">
+      <HintPath>C:\Users\ANOMANX\Documents\Visual Studio 2015\Projects\ApplicationSwitch\ApplicationSwitch\bin\Debug\Microsoft.ApplicationBlocks.Data.dll</HintPath>
     </Reference>
     <Reference Include="ModbusTCP">
       <HintPath>..\..\SCH_SEMB_XS156_AUTOBAG_VS2013\ModbusTCP\ModbusTCP\ModbusTCP\bin\Release\ModbusTCP.dll</HintPath>
@@ -75,6 +82,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccessoriesType.cs" />
+    <Compile Include="Adjust.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Adjust.designer.cs">
+      <DependentUpon>Adjust.cs</DependentUpon>
+    </Compile>
     <Compile Include="AutoBagException.cs" />
     <Compile Include="BagType.cs" />
     <Compile Include="BarcodeReader.cs">
@@ -174,6 +187,9 @@
     <Compile Include="SettingClass.cs" />
     <Compile Include="SettingHelper.cs" />
     <Compile Include="StringCipher.cs" />
+    <EmbeddedResource Include="Adjust.resx">
+      <DependentUpon>Adjust.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="BarcodeReader.resx">
       <DependentUpon>BarcodeReader.cs</DependentUpon>
     </EmbeddedResource>

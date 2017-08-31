@@ -1,6 +1,7 @@
 ﻿using System;
-using AutoBagBench.Persistence;
-
+using System.IO;
+using IniParser;
+using IniParser.Model;
 namespace AutoBagBench
 {
     public class GroupingBox
@@ -11,46 +12,79 @@ namespace AutoBagBench
         public virtual Guid ProcessGuid { get; set; }
         public virtual int GroupingSize { get; set; }
         public virtual int GroupRemainingQuantity { get; set; }
-        public GroupingBox(int groupingSize)
+        public const string NamaFile = "Grouping.ini";
+
+        public string ArticleNumber { get; protected set; }
+        public GroupingBox(int groupingSize,string reference)
         {
-           Load(groupingSize);
+           Load(groupingSize, reference);
+        }
+        public GroupingBox()
+        {
+           
+            var file = new FileInfo(NamaFile);
+            if (!file.Exists) return;
+            var parser = new FileIniDataParser();
+            var data = parser.ReadFile(NamaFile);
+            _reference = data["Group"]["Reference"];
+            _prevPackedQty = Convert.ToInt32(data["Group"]["Packed"]);
+            ArticleNumber = data["Group"]["ArticleNumber"];
+        }
+        private GroupingBox(int groupingSize, int initialRemaining, string reference)
+        {
+            Load(groupingSize,initialRemaining,reference);
         }
 
-        private GroupingBox(int groupingSize, int initialRemaining)
+        public void SetArticle(string article)
         {
-            Load(groupingSize,initialRemaining);
+            ArticleNumber = article;
+            var parser = new FileIniDataParser();
+            var data = new IniData();
+            data["Group"]["Reference"] = _reference;
+            data["Group"]["Packed"] = _prevPackedQty.ToString();
+            data["Group"]["ArticleNumber"] = ArticleNumber;
+            parser.WriteFile(NamaFile, data);
         }
-
-        public void Load(int groupingSize, int remaining)
+        public void Load(int groupingSize, int remaining, string reference)
         {
             Id = new Guid();
             GroupingSize = groupingSize;
             GroupRemainingQuantity = remaining;
+            _reference = reference;
+
         }
-        public void Load(int groupingSize)
+        public void Load(int groupingSize, string reference)
         {
             Id = new Guid();
             GroupingSize = groupingSize;
             GroupRemainingQuantity = groupingSize;
+            _reference = reference;
+
+            var parser = new FileIniDataParser();
+            var data = new IniData();
+            data["Group"]["Reference"] = _reference;
+            data["Group"]["Packed"] = _prevPackedQty.ToString();
+            data["Group"]["ArticleNumber"] = ArticleNumber;
+            parser.WriteFile(NamaFile, data);
         }
         public void ProductInsert(int quantity)
         {
+           
             if (GroupRemainingQuantity < quantity && GroupingSize > 0)
             {
                 throw new Exception("Group remaining quantity is less than product Inserted quantity");
             }
             else
             {
+                AdjustQty(quantity);
                 GroupRemainingQuantity -= quantity;
 
                 if ((GroupRemainingQuantity == 0) && GroupingSize > 0)
                 {
-
-                    if (GroupingTargetReachedEvent != null)
-                        GroupingTargetReachedEvent(GroupRemainingQuantity);
+                    GroupingTargetReachedEvent?.Invoke(GroupRemainingQuantity);
                     Reset();
                 }
-                if (GroupingRemainingChangedEvent != null) GroupingRemainingChangedEvent(GroupRemainingQuantity);
+                GroupingRemainingChangedEvent?.Invoke(GroupRemainingQuantity);
             }
         }
         public void ProductTake(int quantity)
@@ -58,39 +92,78 @@ namespace AutoBagBench
             
             if (GroupingSize - GroupRemainingQuantity < quantity)
             {
-                throw new Exception("Not enough product in Box tobe Taken out");
+                throw new Exception("Not enough product in Box to be Taken out");
             }
-
+            AdjustQty(-quantity);
             GroupRemainingQuantity += quantity;
-            if (GroupingRemainingChangedEvent != null) GroupingRemainingChangedEvent(GroupRemainingQuantity);
+            GroupingRemainingChangedEvent?.Invoke(GroupRemainingQuantity);
         }
-
-     
 
         public void Reset()
         {
             GroupRemainingQuantity = GroupingSize;
         }
 
-
-        public static GroupingBox GetRemainingFromOutputQuantity(int outputQty, int groupSize)
+        public static GroupingBox GetRemainingFromOutputQuantity(int outputQty, int groupSize, string reference)
         {
             var j = outputQty%groupSize;
-            return new GroupingBox(groupSize, groupSize - j);
+            return new GroupingBox(groupSize, groupSize - j,reference);
         }
 
         public void ParseFromTotalOutput(int output)
         {
-            GroupRemainingQuantity = GroupingSize>0? GroupingSize - (output%GroupingSize):GroupingSize ;
-            if (output > 0 && GroupingSize > 0)
+            var oldQtyPacked = QtyPacked;
+            QtyPacked = output;
+            var joutput = _prevPackedQty + output;
+            GroupRemainingQuantity = GroupingSize>0? GroupingSize - (joutput % GroupingSize):GroupingSize ;
+            if (joutput > 0 && GroupingSize > 0)
             {
-                if ((output % GroupingSize ==0) && GroupingSize > 0)
+                if ((joutput % GroupingSize == 0) && GroupingSize > 0 && oldQtyPacked > 0) 
                 {
-                    if (GroupingTargetReachedEvent != null)
-                        GroupingTargetReachedEvent(GroupRemainingQuantity);
+                    GroupingTargetReachedEvent?.Invoke(GroupRemainingQuantity);
                     Reset();
                 }
             }
+        }
+
+        public void SavePrevious()
+        {
+            _prevPackedQty += QtyPacked;
+            QtyPacked = 0;
+            var parser = new FileIniDataParser();
+            IniData data = new IniData();
+            data["Group"]["Reference"] = _reference;
+            data["Group"]["Packed"] = _prevPackedQty.ToString();
+            data["Group"]["ArticleNumber"] = ArticleNumber;
+            parser.WriteFile(NamaFile, data);
+        }
+        public string Reference => _reference;
+        public int QtyPacked { get; protected set; }
+        private int _prevPackedQty;
+        private string _reference;
+        public void SetReference(string reference)
+        {
+            if (_reference != reference)
+            {
+                ResetPackedQty();
+                _reference = reference;
+            }
+        }
+        public void ResetPackedQty()
+        {
+            QtyPacked = 0;
+        }
+        public void AdjustQty(int delta)
+        {
+            QtyPacked += delta;
+            if (QtyPacked < 0)
+            {
+                QtyPacked = 0;
+            }
+        }
+        public override string ToString()
+        {
+            return (QtyPacked+_prevPackedQty).ToString("000");
         }
     }
 }

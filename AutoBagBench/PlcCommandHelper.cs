@@ -140,5 +140,10 @@ namespace AutoBagBench
             byte[] dummy =  { };
             master.WriteSingleRegister(1, 1, 52, ModbusTcpHelper.WordArrayToByteArray(new int[] { Convert.ToInt32(value) }, 1), ref dummy);
         }
+        public static void SetMaintenanceMode(Master master, bool value)
+        {
+            byte[] dummy = { };
+            master.WriteSingleRegister(1, 1, 53, ModbusTcpHelper.WordArrayToByteArray(new int[] { Convert.ToInt32(value) }, 1), ref dummy);
+        }
     }
 }

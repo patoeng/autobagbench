@@ -13,6 +13,6 @@ namespace AutoBagBench
         public virtual string ArticleNumber { get; set; }
         
         public virtual int GroupingSize { get; set; }
-       
+        public virtual string LabelFile { get; set; }
     }
 }

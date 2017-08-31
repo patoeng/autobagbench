@@ -30,6 +30,7 @@ namespace AutoBagBench
                 cbb_AccessoriesType.Enabled = !_readOnly;
                 cbb_BagType.Enabled = !_readOnly;
                 btn_Save.Enabled = !_readOnly;
+                tb_LabelFile.Enabled = !_readOnly;
             }
         }
 
@@ -72,6 +73,7 @@ namespace AutoBagBench
             tb_GroupingSize.Text = ProductReference.GroupingSize.ToString();
             cbb_AccessoriesType.Text = ProductReference.AccessoriesType.ToString();
             cbb_BagType.Text = ProductReference.BagType.ToString();
+            tb_LabelFile.Text = ProductReference.LabelFile;
         }
 
         private ProductReference LoadFromForm()
@@ -83,6 +85,7 @@ namespace AutoBagBench
             productReference.AccessoriesType = (AccessoriesType)Enum.Parse(typeof(AccessoriesType), cbb_AccessoriesType.Text);
             productReference.BagType = (BagType)Enum.Parse(typeof(BagType), cbb_BagType.Text);
             productReference.ArticleNumber = tb_Article.Text;
+            productReference.LabelFile = tb_LabelFile.Text;
             return productReference;
         }
 
