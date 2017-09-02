@@ -129,10 +129,6 @@
             this.label11 = new System.Windows.Forms.Label();
             this.panel31 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel65 = new System.Windows.Forms.Panel();
-            this.lblPacked = new System.Windows.Forms.Label();
-            this.panel64 = new System.Windows.Forms.Panel();
-            this.label6 = new System.Windows.Forms.Label();
             this.panel40 = new System.Windows.Forms.Panel();
             this.label14 = new System.Windows.Forms.Label();
             this.panel41 = new System.Windows.Forms.Panel();
@@ -244,8 +240,6 @@
             this.panel30.SuspendLayout();
             this.panel31.SuspendLayout();
             this.tableLayoutPanel8.SuspendLayout();
-            this.panel65.SuspendLayout();
-            this.panel64.SuspendLayout();
             this.panel40.SuspendLayout();
             this.panel41.SuspendLayout();
             this.panel42.SuspendLayout();
@@ -1397,12 +1391,9 @@
             // tableLayoutPanel8
             // 
             this.tableLayoutPanel8.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
-            this.tableLayoutPanel8.ColumnCount = 3;
+            this.tableLayoutPanel8.ColumnCount = 2;
             this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 48.16327F));
             this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 51.83673F));
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 160F));
-            this.tableLayoutPanel8.Controls.Add(this.panel65, 2, 1);
-            this.tableLayoutPanel8.Controls.Add(this.panel64, 2, 0);
             this.tableLayoutPanel8.Controls.Add(this.panel40, 0, 0);
             this.tableLayoutPanel8.Controls.Add(this.panel41, 1, 0);
             this.tableLayoutPanel8.Controls.Add(this.panel42, 0, 1);
@@ -1416,52 +1407,6 @@
             this.tableLayoutPanel8.Size = new System.Drawing.Size(388, 149);
             this.tableLayoutPanel8.TabIndex = 0;
             // 
-            // panel65
-            // 
-            this.panel65.BackColor = System.Drawing.Color.White;
-            this.panel65.Controls.Add(this.lblPacked);
-            this.panel65.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel65.ForeColor = System.Drawing.Color.Black;
-            this.panel65.Location = new System.Drawing.Point(229, 54);
-            this.panel65.Name = "panel65";
-            this.panel65.Size = new System.Drawing.Size(155, 91);
-            this.panel65.TabIndex = 5;
-            // 
-            // lblPacked
-            // 
-            this.lblPacked.AutoSize = true;
-            this.lblPacked.Font = new System.Drawing.Font("Microsoft Sans Serif", 40F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPacked.ForeColor = System.Drawing.Color.Black;
-            this.lblPacked.Location = new System.Drawing.Point(17, 11);
-            this.lblPacked.Name = "lblPacked";
-            this.lblPacked.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.lblPacked.Size = new System.Drawing.Size(120, 63);
-            this.lblPacked.TabIndex = 0;
-            this.lblPacked.Text = "000";
-            this.lblPacked.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // panel64
-            // 
-            this.panel64.BackColor = System.Drawing.Color.White;
-            this.panel64.Controls.Add(this.label6);
-            this.panel64.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel64.ForeColor = System.Drawing.Color.Black;
-            this.panel64.Location = new System.Drawing.Point(229, 4);
-            this.panel64.Name = "panel64";
-            this.panel64.Size = new System.Drawing.Size(155, 43);
-            this.panel64.TabIndex = 4;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.ForeColor = System.Drawing.Color.Black;
-            this.label6.Location = new System.Drawing.Point(42, 11);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(68, 16);
-            this.label6.TabIndex = 0;
-            this.label6.Text = "PACKED";
-            // 
             // panel40
             // 
             this.panel40.BackColor = System.Drawing.Color.White;
@@ -1470,7 +1415,7 @@
             this.panel40.ForeColor = System.Drawing.Color.Black;
             this.panel40.Location = new System.Drawing.Point(4, 4);
             this.panel40.Name = "panel40";
-            this.panel40.Size = new System.Drawing.Size(101, 43);
+            this.panel40.Size = new System.Drawing.Size(179, 43);
             this.panel40.TabIndex = 0;
             // 
             // label14
@@ -1478,7 +1423,7 @@
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.ForeColor = System.Drawing.Color.Black;
-            this.label14.Location = new System.Drawing.Point(7, 11);
+            this.label14.Location = new System.Drawing.Point(42, 13);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(99, 16);
             this.label14.TabIndex = 0;
@@ -1490,9 +1435,9 @@
             this.panel41.Controls.Add(this.label16);
             this.panel41.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel41.ForeColor = System.Drawing.Color.Black;
-            this.panel41.Location = new System.Drawing.Point(112, 4);
+            this.panel41.Location = new System.Drawing.Point(190, 4);
             this.panel41.Name = "panel41";
-            this.panel41.Size = new System.Drawing.Size(110, 43);
+            this.panel41.Size = new System.Drawing.Size(194, 43);
             this.panel41.TabIndex = 1;
             // 
             // label16
@@ -1500,7 +1445,7 @@
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label16.ForeColor = System.Drawing.Color.Black;
-            this.label16.Location = new System.Drawing.Point(12, 11);
+            this.label16.Location = new System.Drawing.Point(37, 17);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(92, 16);
             this.label16.TabIndex = 0;
@@ -1514,7 +1459,7 @@
             this.panel42.ForeColor = System.Drawing.Color.Black;
             this.panel42.Location = new System.Drawing.Point(4, 54);
             this.panel42.Name = "panel42";
-            this.panel42.Size = new System.Drawing.Size(101, 91);
+            this.panel42.Size = new System.Drawing.Size(179, 91);
             this.panel42.TabIndex = 2;
             // 
             // lbl_GroupSize
@@ -1522,7 +1467,7 @@
             this.lbl_GroupSize.AutoSize = true;
             this.lbl_GroupSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 40F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_GroupSize.ForeColor = System.Drawing.Color.Black;
-            this.lbl_GroupSize.Location = new System.Drawing.Point(-5, 11);
+            this.lbl_GroupSize.Location = new System.Drawing.Point(31, 11);
             this.lbl_GroupSize.Name = "lbl_GroupSize";
             this.lbl_GroupSize.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lbl_GroupSize.Size = new System.Drawing.Size(120, 63);
@@ -1536,9 +1481,9 @@
             this.panel43.Controls.Add(this.lbl_RemainingOfGroup);
             this.panel43.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel43.ForeColor = System.Drawing.Color.Black;
-            this.panel43.Location = new System.Drawing.Point(112, 54);
+            this.panel43.Location = new System.Drawing.Point(190, 54);
             this.panel43.Name = "panel43";
-            this.panel43.Size = new System.Drawing.Size(110, 91);
+            this.panel43.Size = new System.Drawing.Size(194, 91);
             this.panel43.TabIndex = 3;
             // 
             // lbl_RemainingOfGroup
@@ -1546,7 +1491,7 @@
             this.lbl_RemainingOfGroup.AutoSize = true;
             this.lbl_RemainingOfGroup.Font = new System.Drawing.Font("Microsoft Sans Serif", 40F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_RemainingOfGroup.ForeColor = System.Drawing.Color.Black;
-            this.lbl_RemainingOfGroup.Location = new System.Drawing.Point(3, 10);
+            this.lbl_RemainingOfGroup.Location = new System.Drawing.Point(29, 11);
             this.lbl_RemainingOfGroup.Name = "lbl_RemainingOfGroup";
             this.lbl_RemainingOfGroup.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.lbl_RemainingOfGroup.Size = new System.Drawing.Size(120, 63);
@@ -2158,10 +2103,6 @@
             this.panel30.PerformLayout();
             this.panel31.ResumeLayout(false);
             this.tableLayoutPanel8.ResumeLayout(false);
-            this.panel65.ResumeLayout(false);
-            this.panel65.PerformLayout();
-            this.panel64.ResumeLayout(false);
-            this.panel64.PerformLayout();
             this.panel40.ResumeLayout(false);
             this.panel40.PerformLayout();
             this.panel41.ResumeLayout(false);
@@ -2353,10 +2294,6 @@
         private System.Windows.Forms.Button btn_ChangePassword;
         private System.Windows.Forms.Button btnLoadOrderNumber;
         private System.Windows.Forms.CheckBox chb_AutoManual;
-        private System.Windows.Forms.Panel panel65;
-        private System.Windows.Forms.Label lblPacked;
-        private System.Windows.Forms.Panel panel64;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button btnMaintenance;
         private System.Windows.Forms.Button btnAdjust;
         private System.Windows.Forms.Button btnProcessableAdjust;

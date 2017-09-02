@@ -235,7 +235,7 @@ namespace AutoBagBench
         public void LblRemainingUpdate(string data)
         {
             lbl_RemainingOfGroup.Text = data;
-            lblPacked.Text = _groupingBox?.ToString();
+            //lblPacked.Text = _groupingBox?.ToString();
         }
         private void GroupTargetIsReached(int data)
         {
@@ -808,9 +808,10 @@ namespace AutoBagBench
             lbl_Accessories.Text = _thisMechineProcess.Product.AccessoriesType.ToString();
             lbl_GroupSize.Text = _groupingBox.GroupingSize.ToString("000");
             lbl_RemainingOfGroup.Text = _groupingBox.GroupRemainingQuantity.ToString("000");
-            lblPacked.Text = _groupingBox.ToString();
+            //lblPacked.Text = _groupingBox.ToString();
             labelFinishDateTime.Text = "";
-            labelPass.Text = M221Plc.OutputQuantity.ToString("000");//_thisMechineProcess.OutputQuantity.ToString("000");
+          
+            labelPass.Text = _groupingBox.GroupingSize >0 ? (M221Plc.OutputQuantity % _groupingBox.GroupingSize).ToString("000"): "000";//_thisMechineProcess.OutputQuantity.ToString("000");
             labelStartDateTime4.Text = _thisMechineProcess.StartDateTime.ToString("s");
             labelProcessable.Text = label1Reference.Text== Empty ? "000" : _thisMechineProcess.ProcessableQuantity.ToString("000");
             lbl_Plasticbag.Text = _thisMechineProcess.Product.BagType.ToString();// _thisMechineProcess.Product.BagType.ToString();

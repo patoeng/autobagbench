@@ -27,7 +27,7 @@ namespace AutoBagBench
             var parser = new FileIniDataParser();
             var data = parser.ReadFile(NamaFile);
             _reference = data["Group"]["Reference"];
-            _prevPackedQty = Convert.ToInt32(data["Group"]["Packed"]);
+            _prevPackedQty = 0;//Convert.ToInt32(data["Group"]["Packed"]);
             ArticleNumber = data["Group"]["ArticleNumber"];
         }
         private GroupingBox(int groupingSize, int initialRemaining, string reference)
