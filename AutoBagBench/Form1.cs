@@ -1165,14 +1165,16 @@ namespace AutoBagBench
         {
             using (var frm = new OpenProcessList())
             {
-                if (Xs156Client != null)
+                if (Xs156Client == null)
                 {
                     MessageBox.Show("Error Loading Open Order Number.\r\nTraceability Inactive atau Silahkan tekan Reset");
+                    return;
                 }
                 Xs156Client?.GetOpenProcess();
                 int i;
                 try
                 {
+                    
                     for (i = 0; i < Xs156Client?.GetOpenProcessCount(); i++)
                     {
                         Xs156Client.CurrentOpenProcess();
@@ -1180,6 +1182,7 @@ namespace AutoBagBench
                             Xs156Client.CurrentOpenProcessReference(), Xs156Client.CurrentOpenProcessStartDate());
                         Xs156Client.OpenProcessNext();
                     }
+                    frm.ShowDialog();
                 }
                 catch
                 {
@@ -1198,7 +1201,7 @@ namespace AutoBagBench
         {
             if (chb_AutoManual.CheckState == CheckState.Unchecked)
             {
-                chb_AutoManual.Text = "AUTO";
+                chb_AutoManual.Text = @"AUTO";
                 _manual = false;
             }
             else

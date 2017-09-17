@@ -91,7 +91,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(167, 9);
+            this.label3.Location = new System.Drawing.Point(68, 9);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(394, 46);
             this.label3.TabIndex = 3;
@@ -124,12 +124,13 @@
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.tb_Left);
             this.groupBox2.Controls.Add(this.tb_Top);
-            this.groupBox2.Location = new System.Drawing.Point(522, 156);
+            this.groupBox2.Location = new System.Drawing.Point(541, 156);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(229, 160);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "ADJUSTMENT";
+            this.groupBox2.Visible = false;
             // 
             // btn_Apply
             // 
@@ -202,9 +203,9 @@
             // 
             // btn_Print
             // 
-            this.btn_Print.Location = new System.Drawing.Point(518, 335);
+            this.btn_Print.Location = new System.Drawing.Point(12, 509);
             this.btn_Print.Name = "btn_Print";
-            this.btn_Print.Size = new System.Drawing.Size(229, 23);
+            this.btn_Print.Size = new System.Drawing.Size(500, 40);
             this.btn_Print.TabIndex = 6;
             this.btn_Print.Text = "PRINT";
             this.btn_Print.UseVisualStyleBackColor = true;
@@ -214,7 +215,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(769, 550);
+            this.ClientSize = new System.Drawing.Size(530, 560);
             this.Controls.Add(this.btn_Print);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.label4);

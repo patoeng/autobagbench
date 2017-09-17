@@ -130,6 +130,7 @@
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "ADJUSTMENT";
+            this.groupBox2.Visible = false;
             // 
             // btn_Apply
             // 
@@ -202,9 +203,9 @@
             // 
             // btn_Print
             // 
-            this.btn_Print.Location = new System.Drawing.Point(521, 309);
+            this.btn_Print.Location = new System.Drawing.Point(12, 506);
             this.btn_Print.Name = "btn_Print";
-            this.btn_Print.Size = new System.Drawing.Size(229, 23);
+            this.btn_Print.Size = new System.Drawing.Size(503, 32);
             this.btn_Print.TabIndex = 6;
             this.btn_Print.Text = "PRINT";
             this.btn_Print.UseVisualStyleBackColor = true;
@@ -214,7 +215,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(769, 550);
+            this.ClientSize = new System.Drawing.Size(520, 550);
             this.Controls.Add(this.btn_Print);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.label4);

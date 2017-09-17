@@ -78,24 +78,27 @@ namespace AutoBagBench
             lbl_Path.Text = SettingHelper.LabelIndividualPath() + @"\" + LabelPath;
             lbl_Printer.Text = SettingHelper.LabelIndividualPrinter();
 
-            tb_Left.Text = SettingHelper.IndividualLabelHorizontalOffset().ToString();
-            tb_Top.Text = SettingHelper.IndividualLabelVerticalOffset().ToString();
-            cb_Rotate.Text = SettingHelper.IndividualLabelRotate().ToString();
+            //tb_Left.Text = SettingHelper.IndividualLabelHorizontalOffset().ToString();
+            //tb_Top.Text = SettingHelper.IndividualLabelVerticalOffset().ToString();
+            //cb_Rotate.Text = SettingHelper.IndividualLabelRotate().ToString();
         }
         public Image LoadLabel(string path)
         {
             try
             {
                 _loadedDocument?.Close();
-
-
                 _loadedDocument = CsApp.Documents.Open( path, false);
                 _loadedDocument.Variables.Item("ImagePath").Value = SettingHelper.LabelIndividualImagePath() + @"\" +
                                                                          _referenceFamily + @"\" + _activeReference +
                                                                          ".jpg";
 
                 if (CsApp.Documents.Count > 0)
+                {
                     NoDocOpened = false;
+                    //_loadedDocument.HorzPrintOffset = SettingHelper.IndividualLabelHorizontalOffset();
+                    //_loadedDocument.VertPrintOffset = SettingHelper.IndividualLabelVerticalOffset();
+                    //_loadedDocument.Rotate(SettingHelper.IndividualLabelRotate());
+                }
 
             }
             catch (Exception ex)
@@ -198,9 +201,7 @@ namespace AutoBagBench
                 try
                 {
                     _loadedDocument.Printer.SwitchTo(SettingHelper.LabelIndividualPrinter());
-                    _loadedDocument.HorzPrintOffset = SettingHelper.IndividualLabelHorizontalOffset();
-                    _loadedDocument.VertPrintOffset = SettingHelper.IndividualLabelVerticalOffset();
-                    _loadedDocument.Rotate(SettingHelper.IndividualLabelRotate());
+
                     _loadedDocument.PrintDocument(1);
                     Printed = true;
                    

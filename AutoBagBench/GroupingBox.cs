@@ -26,7 +26,7 @@ namespace AutoBagBench
             if (!file.Exists) return;
             var parser = new FileIniDataParser();
             var data = parser.ReadFile(NamaFile);
-            _reference = data["Group"]["Reference"];
+            Reference = data["Group"]["Reference"];
             _prevPackedQty = 0;//Convert.ToInt32(data["Group"]["Packed"]);
             ArticleNumber = data["Group"]["ArticleNumber"];
         }
@@ -40,7 +40,7 @@ namespace AutoBagBench
             ArticleNumber = article;
             var parser = new FileIniDataParser();
             var data = new IniData();
-            data["Group"]["Reference"] = _reference;
+            data["Group"]["Reference"] = Reference;
             data["Group"]["Packed"] = _prevPackedQty.ToString();
             data["Group"]["ArticleNumber"] = ArticleNumber;
             parser.WriteFile(NamaFile, data);
@@ -50,7 +50,7 @@ namespace AutoBagBench
             Id = new Guid();
             GroupingSize = groupingSize;
             GroupRemainingQuantity = remaining;
-            _reference = reference;
+            Reference = reference;
 
         }
         public void Load(int groupingSize, string reference)
@@ -58,11 +58,11 @@ namespace AutoBagBench
             Id = new Guid();
             GroupingSize = groupingSize;
             GroupRemainingQuantity = groupingSize;
-            _reference = reference;
+            Reference = reference;
 
             var parser = new FileIniDataParser();
             var data = new IniData();
-            data["Group"]["Reference"] = _reference;
+            data["Group"]["Reference"] = Reference;
             data["Group"]["Packed"] = _prevPackedQty.ToString();
             data["Group"]["ArticleNumber"] = ArticleNumber;
             parser.WriteFile(NamaFile, data);
@@ -128,25 +128,26 @@ namespace AutoBagBench
 
         public void SavePrevious()
         {
-            _prevPackedQty += QtyPacked;
+            _prevPackedQty = 0;//+= QtyPacked;
             QtyPacked = 0;
             var parser = new FileIniDataParser();
             IniData data = new IniData();
-            data["Group"]["Reference"] = _reference;
+            data["Group"]["Reference"] = Reference;
             data["Group"]["Packed"] = _prevPackedQty.ToString();
             data["Group"]["ArticleNumber"] = ArticleNumber;
             parser.WriteFile(NamaFile, data);
         }
-        public string Reference => _reference;
+        public string Reference { get; private set; }
+
         public int QtyPacked { get; protected set; }
         private int _prevPackedQty;
-        private string _reference;
+
         public void SetReference(string reference)
         {
-            if (_reference != reference)
+            if (Reference != reference)
             {
                 ResetPackedQty();
-                _reference = reference;
+                Reference = reference;
             }
         }
         public void ResetPackedQty()

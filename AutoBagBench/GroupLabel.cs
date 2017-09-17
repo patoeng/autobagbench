@@ -158,9 +158,9 @@ namespace AutoBagBench
                 try
                 {
                     _loadedDocument.Printer.SwitchTo(SettingHelper.LabelGroupPrinter());
-                    _loadedDocument.HorzPrintOffset = SettingHelper.GroupLabelHorizontalOffset();
-                    _loadedDocument.VertPrintOffset = SettingHelper.GroupLabelVerticalOffset();
-                    _loadedDocument.Rotate(SettingHelper.GroupLabelRotate());
+                    //_loadedDocument.HorzPrintOffset = SettingHelper.GroupLabelHorizontalOffset();
+                    //_loadedDocument.VertPrintOffset = SettingHelper.GroupLabelVerticalOffset();
+                    //_loadedDocument.Rotate(SettingHelper.GroupLabelRotate());
                     _loadedDocument.PrintDocument(1);
                 }
                 catch (FormatException error)
@@ -210,11 +210,6 @@ namespace AutoBagBench
             {
                 MessageBox.Show(exception.Message);
             }
-        }
-
-        private void btnReload_Click(object sender, EventArgs e)
-        {
-
-        }
+        }   
     }
 }

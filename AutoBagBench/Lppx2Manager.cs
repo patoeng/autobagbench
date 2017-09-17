@@ -29,40 +29,23 @@ namespace AutoBagBench
 			if(_mCsApp != null)
 				return;
 
-			Object csObject;
 
 			try
 			{
-				csObject = System.Runtime.InteropServices.Marshal.GetActiveObject(Lppx2ProgId);
-			}
-			catch
-			{
-				//No CODESOFT object Running !
-				csObject = null;
-			}
+			   
+			        _mCsApp = new LabelManager2.Application();
+			        _bDeleteCsApp = true;
 
-			try
-			{
-				if(csObject == null)
-				{
-                    _mCsApp = new LabelManager2.Application();
-					_bDeleteCsApp = true;
-				}
-				else
-				{
-					_mCsApp = (LabelManager2.Application)csObject;
-				}
-				//m_CsApp.Visible = true;
 			}
 			catch(Exception e)
 			{
-				string szerror = e.Message.ToString();
+			    string szerror = e.Message;
 				MessageBox.Show(szerror);
 			}
 				
 			if(bUnableToLoad == false)
 			{
-				if( _mCsApp.IsEval )
+				if( _mCsApp != null && _mCsApp.IsEval )
 				{
 					MessageBox.Show(null,
 						"DemoMode",
