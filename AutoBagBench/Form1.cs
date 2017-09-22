@@ -240,10 +240,10 @@ namespace AutoBagBench
         public void GroupBoxCompleted(string data)
         {
             PrintGroup();
-            M221Plc.SetHmiState(HmiState.ChangeBigBox);
+            //M221Plc.SetHmiState(HmiState.ChangeBigBox);
             //MessageBox.Show(@"Big Box Quantity sudah terpenuhi! Segera ganti Big Box", @"Big Box Penuh",
             //    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            M221Plc.SetHmiState(HmiState.WaitingForAccessories);
+           // M221Plc.SetHmiState(HmiState.WaitingForAccessories);
         }
 
         private void ReAssignGroupingEvents()
