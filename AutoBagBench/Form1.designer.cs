@@ -845,6 +845,7 @@
             this.labelProcessable.Size = new System.Drawing.Size(140, 31);
             this.labelProcessable.TabIndex = 0;
             this.labelProcessable.Text = "Reference";
+            this.labelProcessable.Visible = false;
             // 
             // panel24
             // 
@@ -1421,11 +1422,11 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.ForeColor = System.Drawing.Color.Black;
             this.label14.Location = new System.Drawing.Point(42, 13);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(99, 16);
+            this.label14.Size = new System.Drawing.Size(119, 20);
             this.label14.TabIndex = 0;
             this.label14.Text = "GROUP SIZE";
             // 
@@ -1443,11 +1444,11 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label16.ForeColor = System.Drawing.Color.Black;
-            this.label16.Location = new System.Drawing.Point(37, 17);
+            this.label16.Location = new System.Drawing.Point(37, 13);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(92, 16);
+            this.label16.Size = new System.Drawing.Size(110, 20);
             this.label16.TabIndex = 0;
             this.label16.Text = "REMAINING";
             // 

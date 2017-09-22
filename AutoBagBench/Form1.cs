@@ -176,15 +176,11 @@ namespace AutoBagBench
             M221ExceptionEvent = M221_ErrorHandler;
             M221HmiStateHandler = M221_HmiStateHandler;
 
-
             DelegateFunction = PlcDataUpdated;
             DelegateFunction2 = BarcodeScanned;
-
            
             M221Plc.SetHmiState(HmiState.NoState);
             M221Plc.SetPlcMode(PlcMode.Auto);
-
-           
            
             checkBox1.Checked = _thisMechineProcess.Traceability;
             if (!_thisMechineProcess.Traceability)
@@ -695,6 +691,8 @@ namespace AutoBagBench
                     _thisMechineProcess.Product = product;
                     _thisMechineProcess.SaveOrUpdate();
                     SettingHelper.SetLastRunningProccessId(_thisMechineProcess.ProcessGuid.ToString());
+
+                   
                     return true;
                
             }
@@ -1092,6 +1090,7 @@ namespace AutoBagBench
             btn_Setting.Visible = show;
             btnAdjust.Visible = show;
             btnProcessableAdjust.Visible = show;
+            labelProcessable.Visible = show;
         }
         private void btn_Login_Click(object sender, EventArgs e)
         {
